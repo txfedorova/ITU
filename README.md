@@ -2,8 +2,7 @@
 ---
 #  Popis mobilní aplikace "CineMatch"
 ## Úvod
-
-"CineMatch" je inovativní mobilní aplikace, která kombinuje zábavu a sociální interakci s vášní pro filmy. Tato aplikace byla navržena pro přátele, kteří chtějí společně objevovat nové filmy, ale nemají vždy na výběr, co si společně přehrát. "CineMatch" funguje na principu "swipe" podobně jako populární seznamovací aplikace Tinder, ale místo potenciálních partnerů se zde vybírají filmy.
+"CineMatch" je mobilní aplikace, která kombinuje zábavu a sociální interakci s vášní pro filmy. Tato aplikace byla navržena pro přátele, kteří chtějí společně objevovat nové filmy, ale nemají vždy na výběr, co si společně přehrát. "CineMatch" funguje na principu "swipe" podobně jako populární seznamovací aplikace Tinder, ale místo potenciálních partnerů se zde vybírají filmy.
 
 ## Funkce aplikace
 ### 1. Profily filmů
