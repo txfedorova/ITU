@@ -37,6 +37,10 @@ class _SwipeImageGalleryState extends State<SwipeImageGallery> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back, color: Colors.black),
+        //   onPressed: () => Navigator.of(context).pop(),
+        // )
       ),
       body: PageView.builder(
         itemCount: imageNames.length,

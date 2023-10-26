@@ -1,0 +1,13 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Film _$FilmFromJson(Map<String, dynamic> json) => Film(
+      json['id'] as int,
+      json['title'] as String,
+    );
+
+Map<String, dynamic> _$FilmToJson(Film instance) => <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+    };

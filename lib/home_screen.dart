@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'swipe_image_gallery.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+import 'view/edit_screen.dart';
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+import 'package:go_router/go_router.dart';
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+
   String buttonText = 'Click';
   @override
   Widget build(BuildContext context) {
@@ -18,21 +17,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.amber,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
           ),
           //width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -41,11 +32,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: const Text('Next User'),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SwipeImageGallery(),
-                    ),
-                  );
+                  context.push('/filmGallery');
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => SwipeImageGallery(),
+                  //   ),
+                  // );
+                },
+              ),
+              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('List films'),
+                onPressed: () {
+                  context.push('/listFilms');
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => EditScreen(),
+                  //   ),
+                  // );
                 },
               ),
             ],
@@ -55,3 +63,65 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// class _HomeScreenState extends State<HomeScreen> {
+//   String buttonText = 'Click';
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Home Screen'),
+//       ),
+//       body: Center(
+//         child: Container(
+//           decoration: BoxDecoration(
+//             color: Colors.amber,
+//             borderRadius: BorderRadius.circular(10),
+//             boxShadow: const [
+//               BoxShadow(
+//                 color: Colors.black,
+//                 blurRadius: 10,
+//                 offset: Offset(0, 5),
+//               ),
+//             ],
+//           ),
+//           //width: double.infinity,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.end,
+//             children: [
+//               ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: Colors.green,
+//                   foregroundColor: Colors.white,
+//                 ),
+//                 child: const Text('Next User'),
+//                 onPressed: () {
+//                   Navigator.of(context).push(
+//                     MaterialPageRoute(
+//                       builder: (context) => SwipeImageGallery(),
+//                     ),
+//                   );
+//                 },
+//               ),
+//               ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: Colors.green,
+//                   foregroundColor: Colors.white,
+//                 ),
+//                 child: const Text('Add film'),
+//                 onPressed: () {
+//                   Navigator.of(context).push(
+//                     MaterialPageRoute(
+//                       builder: (context) => EditScreen(),
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
