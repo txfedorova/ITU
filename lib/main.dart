@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:itu_app/swipe_image_gallery.dart';
-import 'package:itu_app/view/edit_screen.dart';
-import 'package:itu_app/view/list_films.dart';
-import 'custom_bottom_navigation_bar.dart';
-import 'home_screen.dart';
-import 'settings_screen.dart';
+import 'package:itu_app/view/gallery_screen.dart';
+import 'package:itu_app/view/film_edit_screen.dart';
+import 'package:itu_app/view/films_list_screen.dart';
+import 'package:itu_app/common/custom_bottom_navigation_bar.dart';
+import 'package:itu_app/view/home_screen.dart';
+import 'package:itu_app/view/settings_screen.dart';
 
 import 'dart:io' show Platform;
 
@@ -13,9 +13,12 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
-import 'package:itu_app/model/films.dart';
+import 'package:itu_app/controller/film_controller.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  setupWindow();
+  runApp(const MyApp());
+}
 
 const double windowWidth = 400;
 const double windowHeight = 800;
@@ -46,7 +49,7 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/filmGallery',
-        builder: (context, state) => SwipeImageGallery(),
+        builder: (context, state) => GalleryScreen(),
         // routes: [
         //   GoRoute(
         //     path: 'cart',
@@ -56,11 +59,11 @@ GoRouter router() {
       ),
       GoRoute(
         path: '/editScreen',
-        builder: (context, state) => EditScreen(),
+        builder: (context, state) => FilmEditScreen(),
       ),
       GoRoute(
         path: '/listFilms',
-        builder: (context, state) => ListFilms(),
+        builder: (context, state) => FilmsList(),
       ),
     ],
   );
@@ -69,13 +72,10 @@ GoRouter router() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // @override
-  // State<MyApp> createState() => _MyAppState();
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => FilmsModel(),
+      create: (context) => FilmController(),
       child: MaterialApp.router(
         title: "Title",
         routerConfig: router(),

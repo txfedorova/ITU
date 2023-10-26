@@ -5,6 +5,8 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._privateConstructor();
   static Database? _database;
 
+  static const String _databaseName = 'film_database.db';
+
   DatabaseHelper._privateConstructor();
 
   factory DatabaseHelper() {
@@ -21,16 +23,43 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    final path = join(await getDatabasesPath(), 'film_database.db');
+    final path = join(await getDatabasesPath(), _databaseName);
     return openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    print('CREATING DATABASE\n\n\n\n\n\n\n');
+
     await db.execute('''
       CREATE TABLE films (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        title TEXT NOT NULL,
+        year INTEGER NOT NULL,
+        duration TIME,
+        director TEXT,
+        description TEXT,
+        actors TEXT,
+        image TEXT
       )
     ''');
+
+    // await db.execute('''
+    //   CREATE TABLE actors (
+    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //     name TEXT,
+    //     FOREIGN KEY (filmId) REFERENCES films(id)
+    //   )
+    // ''');
+  }
+
+  Future<void> clearDatabase() async {
+    try {
+      final databaseFile = join(await getDatabasesPath(), _databaseName); // Replace with your database file name
+
+      await deleteDatabase(databaseFile);
+      print('DATABASE DELETED\n\n\n');
+    } catch (e) {
+      print('ERROR DELETING DATABASE: $e\n\n\n');
+    }
   }
 }
