@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itu_app/common/itu_elevated_button.dart';
 
 class UserInputWidget extends StatefulWidget {
   @override
@@ -43,15 +44,17 @@ class _UserInputWidgetState extends State<UserInputWidget> {
             controller: _nameController,
             decoration: const InputDecoration(
               hintText: 'User Name', // Display the hint text
-              hintStyle: TextStyle(color: Colors.grey), // Style for the hint text
+              hintStyle:
+                  TextStyle(color: Colors.grey), // Style for the hint text
               focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.black), // Border color when focused
+                borderSide: BorderSide(
+                    color: Colors.black), // Border color when focused
               ),
             ),
           ),
         ),
         const SizedBox(height: 6),
+       
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
@@ -59,8 +62,8 @@ class _UserInputWidgetState extends State<UserInputWidget> {
                   BorderRadius.circular(20), // Adjust the radius as needed
             ),
             padding: const EdgeInsets.all(14),
-            backgroundColor: const Color(0xFF59B773),
-            foregroundColor: Colors.white,
+            // backgroundColor: const Color(0xFF59B773),
+            // foregroundColor: Colors.white,
           ),
           onPressed: () {
             final userName = _nameController.text;

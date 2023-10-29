@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:itu_app/model/user_input.dart';
+import 'package:itu_app/view/user_input.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,12 +10,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF59B773),
+        //backgroundColor: const Color(0xFF59B773),
         title: const Text('CineMatch'),
       ),
       body: Center(
         child: Container(
-          color: const Color(0xFFF6FAF1),
+          //color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,20 +36,12 @@ class HomeScreen extends StatelessWidget {
 
               // Buttons at the bottom
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF59B773),
-                  foregroundColor: Colors.white,
-                ),
                 child: const Text('Next User'),
                 onPressed: () {
                   context.push('/filmGallery');
                 },
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF59B773),
-                  foregroundColor: Colors.white,
-                ),
                 child: const Text('List films'),
                 onPressed: () {
                   context.push('/listFilms');

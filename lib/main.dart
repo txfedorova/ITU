@@ -17,7 +17,10 @@ import 'package:itu_app/controller/film_controller.dart';
 
 void main() {
   setupWindow();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => FilmController(),
+    child: const MyApp()
+  ));
 }
 
 const double windowWidth = 400;
@@ -69,31 +72,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FilmController(),
-      child: MaterialApp.router(
-        title: "Title",
-        routerConfig: router(),
-        debugShowCheckedModeBanner: false,
+    return MaterialApp.router(
+      title: "Title",
+      routerConfig: router(),
+      debugShowCheckedModeBanner: false,
+       theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: const Color(0xFF59B773),
+          secondary: const Color(0xFF59B773),
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF6FAF1),
+        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
       ),
     );
-
-    // MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   home: Scaffold(
-    //     body: getCurrentScreen(navBarIndex),
-    //     bottomNavigationBar: CustomBottomNavigationBar(
-    //       onIndexChanged: (int index) {
-    //         setState(() {
-    //           navBarIndex = index;
-    //         });
-    //         // Handle index change here
-    //         // You can update the state or navigate to a different screen based on the index
-    //       },
-    //     ),
+  }
+    // return ChangeNotifierProvider(
+    //   create: (context) => FilmController(),
+    //   child: MaterialApp.router(
+    //     title: "Title",
+    //     routerConfig: router(),
+    //     debugShowCheckedModeBanner: false,
     //   ),
     // );
-  }
+
+   
+}
 
   // Widget getCurrentScreen(int index) {
   //   switch (index) {
@@ -105,5 +108,4 @@ class MyApp extends StatelessWidget {
   //       return Container(); // Return a default screen or handle error case
   //   }
   // }
-}
 
