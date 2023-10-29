@@ -50,12 +50,7 @@ GoRouter router() {
       GoRoute(
         path: '/filmGallery',
         builder: (context, state) => GalleryScreen(),
-        // routes: [
-        //   GoRoute(
-        //     path: 'cart',
-        //     builder: (context, state) => const MyCart(),
-        //   ),
-        // ],
+       
       ),
       GoRoute(
         path: '/editScreen',
@@ -111,41 +106,4 @@ class MyApp extends StatelessWidget {
   //   }
   // }
 }
-
-// class _MyAppState extends State<MyApp> {
-//   int navBarIndex = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Scaffold(
-//         body: getCurrentScreen(navBarIndex),
-//         bottomNavigationBar: CustomBottomNavigationBar(
-//           onIndexChanged: (int index) {
-//             setState(() {
-//               navBarIndex = index;
-//             });
-//             // Handle index change here
-//             // You can update the state or navigate to a different screen based on the index
-//           },
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget getCurrentScreen(int index) {
-//     switch (index) {
-//       case 0:
-//         return const HomeScreen();
-//       case 1:
-//         return const SettingsScreen();
-//       default:
-//         return Container(); // Return a default screen or handle error case
-//     }
-//   }
-// }
-
-
-
 
