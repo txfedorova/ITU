@@ -26,9 +26,6 @@ class FilmsList extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.amber,
-          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,35 +42,76 @@ class FilmsList extends StatelessWidget {
                   ElevatedButton(
                     child: const Text('Add test films'),
                     onPressed: () {
-                      var film0 = Film(title: "The Sherlock", year: 2021, 
-                        duration: const Duration(hours: 1, minutes: 34), 
-                        director: "Arnold Arnoldson", 
-                        description: "Sherlock Holmes and Dr. Watson find themselves in 1890s London in this Christmas special.",
-                        actors: "Benedict Cummerbatch, Martin Freeman");
-                      var film1 = Film(title: "The Holmes", year: 2020, 
-                        duration: const Duration(hours: 1, minutes: 54), 
-                        director: "Robert Robertsson", 
-                        description: "Sherlock Holmes and Dr. Watson find themselves in 1890s London in this Christmas special.  Again",
-                        actors: "Benedict Cummerbatch, Robert Downey Jr.");
+                      var film0 = Film(
+                          title: "Elementary Investigations",
+                          year: 2018,
+                          duration: const Duration(hours: 1, minutes: 50),
+                          director: "Sarah Smith",
+                          description: "Follow the adventures of Sherlock Holmes and Dr. Watson as they tackle puzzling cases and outsmart criminals in this thrilling detective series.",
+                          actors: "Jonny Lee Miller, Aidan Quinn");
+                      var film1 = Film(
+                          title: "The Mystery of Baker Street",
+                          year: 2019,
+                          duration: const Duration(hours: 2, minutes: 5),
+                          director: "Amanda Anderson",
+                          description: "A modern adaptation of Sherlock Holmes, featuring the brilliant detective and his partner, Dr. Watson, as they solve intricate crimes in contemporary London.",
+                          actors: "Jonny Lee Miller, Lucy Liu");
+                      var film2 = Film(
+                          title: "The Mysterious Heist",
+                          year: 2019,
+                          duration: const Duration(hours: 2, minutes: 10),
+                          director: "Olivia Owens",
+                          description: "A group of skilled thieves plan and execute a daring heist to steal priceless artifacts from a high-security museum, leading to a thrilling cat-and-mouse game with the authorities.",
+                          actors: "Emma Watson, Tom Hardy"
+                      );
+                      var film3 = Film(
+                          title: "Inception",
+                          year: 2010,
+                          duration: const Duration(hours: 2, minutes: 28),
+                          director: "Christopher Nolan",
+                          description: "A skilled thief, Cobb, is able to enter people's dreams and steal their secrets. Now he is given a task of planting an idea into someone's mind, a concept that is considered impossible.",
+                          actors: "Leonardo DiCaprio, Joseph Gordon-Levitt"
+                      );
+                      var film4 = Film(
+                          title: "The Martian",
+                          year: 2015,
+                          duration: const Duration(hours: 2, minutes: 24),
+                          director: "Ridley Scott",
+                          description: "Astronaut Mark Watney is presumed dead after a fierce storm and left behind on Mars by his crew. With limited supplies, he must find a way to survive and signal to Earth that he is still alive.",
+                          actors: "Matt Damon, Jessica Chastain"
+                      );
+                      var film5 = Film(
+                          title: "The Grand Budapest Hotel",
+                          year: 2014,
+                          duration: const Duration(hours: 1, minutes: 39),
+                          director: "Wes Anderson",
+                          description: "The adventures of Gustave H, a legendary concierge at a famous European hotel, and Zero Moustafa, the lobby boy who becomes his most trusted friend.",
+                          actors: "Ralph Fiennes, Tony Revolori"
+                      );
+
                       var controller = context.read<FilmController>();
                       controller.insertFilm(film0);
                       controller.insertFilm(film1);
+                      controller.insertFilm(film2);
+                      controller.insertFilm(film3);
+                      controller.insertFilm(film4);
+                      controller.insertFilm(film5);
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Text('Delete all films'),
+                    onPressed: () {
+                      var controller = context.read<FilmController>();
+                      controller.clearFilms();
                     },
                   ),
                   // ElevatedButton(
-                  //   child: const Text('Delete all films'),
+                  //   child: const Text('Clear database'),
                   //   onPressed: () {
                   //     var controller = context.read<FilmController>();
-                  //     controller.clearFilms();
+                  //     controller.clearDatabase();
                   //   },
                   // ),
-                  ElevatedButton(
-                    child: const Text('Clear database'),
-                    onPressed: () {
-                      var controller = context.read<FilmController>();
-                      controller.clearDatabase();
-                    },
-                  ),
                 ],
               ),
               // Wait until database returns the list of films
