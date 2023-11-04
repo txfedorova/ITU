@@ -61,7 +61,7 @@ class _FilmEditScreenState extends State<FilmEditScreen> {
               ),
               TextFormField(
                 controller: durationController,
-                decoration: InputDecoration(labelText: 'Duration'),
+                decoration: InputDecoration(labelText: 'Duration', errorText: 'Please enter the time in the format: hours:minutes:seconds'),
               ),
               TextFormField(
                 controller: directorController,
