@@ -10,7 +10,6 @@ class FilmsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //var films = context.select((FilmsModel model) => model.films());
     var films = context.watch<FilmController>().films();
 
     print("\n\nBUILDING LIST FILMS\n\n");
@@ -105,13 +104,7 @@ class FilmsList extends StatelessWidget {
                       controller.clearFilms();
                     },
                   ),
-                  // ElevatedButton(
-                  //   child: const Text('Clear database'),
-                  //   onPressed: () {
-                  //     var controller = context.read<FilmController>();
-                  //     controller.clearDatabase();
-                  //   },
-                  // ),
+             
                 ],
               ),
               // Wait until database returns the list of films
@@ -148,9 +141,6 @@ class _ListEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //var item = context.select((FilmsModel model) => model.getByPosition(index));
-    //var item = context.watch<FilmsModel>().film(index);
-
     var textTheme = Theme.of(context).textTheme.titleLarge;
 
     return Padding(
@@ -159,12 +149,9 @@ class _ListEntry extends StatelessWidget {
         maxHeight: 48,
         child: Row(
           children: [
-            //const SizedBox(width: 24),
             Expanded(
-              //child: Text(snapshot.data.title, style: textTheme),
               child: Text(item.title, style: textTheme),
             ),
-            //const SizedBox(width: 24),
             _ListEntryDeleteButton(item: item),
           ],
         ),

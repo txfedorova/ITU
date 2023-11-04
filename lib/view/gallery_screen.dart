@@ -4,23 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For rootBundle
 
 class GalleryScreen extends StatefulWidget {
-  // final List<String> imageUrls = [
-  //   'https://www.pravilamag.ru/upload/img_cache/8b5/8b5b05621633ac88c90f620d10e236fd_ce_2369x1477x0x54_fitted_1332x0.jpg',
-  //   'https://cdn.xsd.cz/original/3be921bb895f36519fff1cae159fcb85.jpg',
-  // ];
-  
-  //final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-// This returns a List<String> with all your images
-  //final imageAssetsList = assetManifest.listAssets().where((string) => string.startsWith("assets/images/")).toList()
-
   @override
   _GalleryScreenState createState() => _GalleryScreenState();
-
-
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  //late List<String> imageNames; // = ['Forrest_Gump.jpg', 'Kolija.jpg'];
   List<String> imageNames = ['Forrest_Gump.jpg', 'Kolija.jpg'];
   int _currentIndex = 0;
   PageController? _pageController;
@@ -29,7 +17,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
-    //_initImages(); // The image list is empty after calling this method
   }
 
   @override
@@ -37,10 +24,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back, color: Colors.black),
-        //   onPressed: () => Navigator.of(context).pop(),
-        // )
       ),
       body: PageView.builder(
         itemCount: imageNames.length,

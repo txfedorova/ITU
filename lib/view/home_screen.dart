@@ -10,12 +10,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        //backgroundColor: const Color(0xFF59B773),
         title: const Text('CineMatch'),
       ),
       body: Center(
         child: Container(
-          //color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,8 +29,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // Spacer to separate the user input section from the buttons
-              //Spacer(),
+
 
               // Buttons at the bottom
               ElevatedButton(

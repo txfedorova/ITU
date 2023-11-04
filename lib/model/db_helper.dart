@@ -42,14 +42,6 @@ class DatabaseHelper {
         image TEXT
       )
     ''');
-
-    // await db.execute('''
-    //   CREATE TABLE actors (
-    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //     name TEXT,
-    //     FOREIGN KEY (filmId) REFERENCES films(id)
-    //   )
-    // ''');
   }
 
   Future<void> clearDatabase() async {

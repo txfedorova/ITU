@@ -23,12 +23,6 @@ class Film {
       this.image = ''})
       : id = null;
 
-  // @override
-  // int get hashCode => id;
-
-  // @override
-  // bool operator ==(Object other) => other is Film && other.id == id;
-
   Film.fromMap(Map<String, dynamic> map)
       : id = map['id'] as int,
         title = map['title'] as String,

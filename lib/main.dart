@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itu_app/view/gallery_screen.dart';
 import 'package:itu_app/view/film_edit_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
-import 'package:itu_app/common/custom_bottom_navigation_bar.dart';
 import 'package:itu_app/view/home_screen.dart';
-import 'package:itu_app/view/settings_screen.dart';
 
 import 'dart:io' show Platform;
 
@@ -85,27 +83,5 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
       ),
     );
-  }
-    // return ChangeNotifierProvider(
-    //   create: (context) => FilmController(),
-    //   child: MaterialApp.router(
-    //     title: "Title",
-    //     routerConfig: router(),
-    //     debugShowCheckedModeBanner: false,
-    //   ),
-    // );
-
-   
+  }   
 }
-
-  // Widget getCurrentScreen(int index) {
-  //   switch (index) {
-  //     case 0:
-  //       return const HomeScreen();
-  //     case 1:
-  //       return const SettingsScreen();
-  //     default:
-  //       return Container(); // Return a default screen or handle error case
-  //   }
-  // }
-
