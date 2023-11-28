@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserInputWidget extends StatefulWidget {
+  const UserInputWidget({super.key});
+
   @override
-  _UserInputWidgetState createState() => _UserInputWidgetState();
+  State<UserInputWidget> createState() => _UserInputWidgetState();
 }
 
 class _UserInputWidgetState extends State<UserInputWidget> {
@@ -17,14 +19,14 @@ class _UserInputWidgetState extends State<UserInputWidget> {
           children: users.asMap().entries.map((entry) {
             final int index = entry.key;
             final String user = entry.value;
-            return Container(
+            return SizedBox(
               height: 55,
               child: Card(
                 margin: const EdgeInsets.all(3.0), // Add margin for spacing
                 child: ListTile(
                   title: Text(user),
                   trailing: IconButton(
-                    icon: Icon(Icons.close), // X icon for delete
+                    icon: const Icon(Icons.close), // X icon for delete
                     onPressed: () {
                       // Remove the user from the list
                       setState(() {

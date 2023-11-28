@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: ListView(
                   //shrinkWrap: true,
-                  children: [
+                  children: const [
                     // Include the UserInputWidget here
                     UserInputWidget(), // This is the user input section
                   ],

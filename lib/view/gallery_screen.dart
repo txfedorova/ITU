@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 class GalleryScreen extends StatefulWidget {
+  const GalleryScreen({super.key});
+
   @override
-  _GalleryScreenState createState() => _GalleryScreenState();
+  State<GalleryScreen> createState() => _GalleryScreenState();
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itu_app/view/gallery_screen.dart';
 import 'package:itu_app/view/film_edit_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
+import 'package:itu_app/view/film_query_screen.dart';
 import 'package:itu_app/view/home_screen.dart';
 
 import 'dart:io' show Platform;
@@ -46,20 +47,24 @@ GoRouter router() {
     routes: [
       GoRoute(
         path: '/homeScreen',
-        builder: (context, state) => HomeScreen(),
+        builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: '/filmGallery',
-        builder: (context, state) => GalleryScreen(),
+        builder: (context, state) => const GalleryScreen(),
        
       ),
       GoRoute(
         path: '/editScreen',
-        builder: (context, state) => FilmEditScreen(),
+        builder: (context, state) => const FilmEditScreen(),
+      ),
+      GoRoute(
+        path: '/queryScreen',
+        builder: (context, state) => const FilmQueryScreen(),
       ),
       GoRoute(
         path: '/listFilms',
-        builder: (context, state) => FilmsList(),
+        builder: (context, state) => const FilmsList(),
       ),
     ],
   );
@@ -80,7 +85,7 @@ class MyApp extends StatelessWidget {
           secondary: const Color(0xFF59B773),
         ),
         scaffoldBackgroundColor: const Color(0xFFF6FAF1),
-        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
+        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.black)),
       ),
     );
   }   

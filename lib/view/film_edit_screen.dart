@@ -10,10 +10,10 @@ import 'package:provider/provider.dart';
 class FilmEditScreen extends StatefulWidget {
   final Film? film;
 
-  FilmEditScreen({this.film});
+  const FilmEditScreen({super.key, this.film});
 
   @override
-  _FilmEditScreenState createState() => _FilmEditScreenState();
+  State<FilmEditScreen> createState() => _FilmEditScreenState();
 }
 
 class _FilmEditScreenState extends State<FilmEditScreen> {
@@ -44,7 +44,7 @@ class _FilmEditScreenState extends State<FilmEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Film Details'),
+        title: const Text('Edit Film Details'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -53,31 +53,31 @@ class _FilmEditScreenState extends State<FilmEditScreen> {
             children: [
               TextFormField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextFormField(
                 controller: yearController,
-                decoration: InputDecoration(labelText: 'Year'),
+                decoration: const InputDecoration(labelText: 'Year'),
               ),
               TextFormField(
                 controller: durationController,
-                decoration: InputDecoration(labelText: 'Duration', errorText: 'Please enter the time in the format: hours:minutes:seconds'),
+                decoration: const InputDecoration(labelText: 'Duration', errorText: 'Please enter the time in the format: hours:minutes:seconds'),
               ),
               TextFormField(
                 controller: directorController,
-                decoration: InputDecoration(labelText: 'Director'),
+                decoration: const InputDecoration(labelText: 'Director'),
               ),
               TextFormField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
               TextFormField(
                 controller: actorsController,
-                decoration: InputDecoration(labelText: 'Actors'),
+                decoration: const InputDecoration(labelText: 'Actors'),
               ),
               TextFormField(
                 controller: imageController,
-                decoration: InputDecoration(labelText: 'Image URL'),
+                decoration: const InputDecoration(labelText: 'Image URL'),
               ),
               ElevatedButton(
                 onPressed: () {
