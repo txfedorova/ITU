@@ -1,7 +1,5 @@
-import 'dart:convert'; // For JSON
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For rootBundle
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 class GalleryScreen extends StatefulWidget {
   @override
@@ -9,82 +7,43 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
+  final CardSwiperController _controller = CardSwiperController();
   List<String> imageNames = ['Forrest_Gump.jpg', 'Kolija.jpg'];
-  int _currentIndex = 0;
-  PageController? _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
-  }
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
       ),
-      body: PageView.builder(
-        itemCount: imageNames.length,
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          return AnimatedBuilder(
-            animation: _pageController!,
-            builder: (context, child) {
-              double value = 1.0;
-              if (_pageController?.position.haveDimensions ?? false) {
-                value = _pageController!.page! - index;
-                value = (1 - (value.abs() * 0.5)).clamp(0.0, 1.0);
-              }
-              return Center(
-                child: SizedBox(
-                  height: Curves.easeInOut.transform(value) *
-                      MediaQuery.of(context).size.height,
-                  width: Curves.easeInOut.transform(value) *
-                      MediaQuery.of(context).size.width,
-                  child: child,
-                ),
-              );
-            },
-            child: Image.asset('images/${imageNames[index]}'),
-          );
-        },
+      body: SafeArea(
+        child: CardSwiper(
+          controller: _controller,
+          cardsCount: imageNames.length,
+          cardBuilder: (context, index, _, __) {
+            return SizedBox(
+              width: screenSize.width,
+              height: screenSize.height,
+              child: Image.asset('images/${imageNames[index]}', fit: BoxFit.cover),
+            );
+          },
+          onSwipe: (previousIndex, currentIndex, direction) {
+            debugPrint('Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
+            return true;
+          },
+          numberOfCardsDisplayed: 2,
+          backCardOffset: const Offset(-30, 0),
+          //padding: EdgeInsets.only(bottom: screenSize.height * 0.05), // Отступ снизу, чтобы вторая карточка была видна
+        ),
       ),
     );
   }
 
-  // Doesn't work because AssetManifest.json doesn't exist
-  // Upd: it is generated only after building the release apk
-  // https://stackoverflow.com/questions/56544200/flutter-how-to-get-a-list-of-names-of-all-images-in-assets-directory
-  // https://stackoverflow.com/questions/54692052/display-all-images-in-a-directory-to-a-list-in-flutter
-  Future _initImages() async {
-    // >> To get paths you need these 2 lines
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    // >> To get paths you need these 2 lines
-
-    final imagePaths = manifestMap.keys
-        .where((String key) => key.contains('images/'))
-        .where((String key) => key.contains('.svg'))
-        .toList();
-
-    print(imagePaths);
-  
-    setState(() {
-      imageNames = imagePaths;
-    });
-  }
-
   @override
   void dispose() {
-    _pageController?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }
