@@ -63,8 +63,6 @@ class _UserInputWidgetState extends State<UserInputWidget> {
                   BorderRadius.circular(20), // Adjust the radius as needed
             ),
             padding: const EdgeInsets.all(14),
-            // backgroundColor: const Color(0xFF59B773),
-            // foregroundColor: Colors.white,
           ),
           onPressed: () {
             final userName = _nameController.text;

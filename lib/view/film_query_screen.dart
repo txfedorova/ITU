@@ -252,7 +252,8 @@ class _QueryResult extends StatelessWidget {
     // });
 
     String url = "${tmdbImageBaseUrl}${filmQueryData.posterPath}";
-    final imageName = path.basename(url);
+    //final imageName = path.basename(url);
+    final imageName = "${filmQueryData.title}.jpg";
 
     // Check if the image is already downloaded
 
@@ -304,12 +305,12 @@ class _QueryResult extends StatelessWidget {
 
   void addFilmToDatabase(FilmController controller) async {
     // Download image from posterPath and save it locally
-    String localPath = await downloadPoster();
+    String savedPosterLocalPath = await downloadPoster();
 
     Film film = Film(
       title: filmQueryData.title,
       overview: filmQueryData.overview,
-      posterPath: localPath, // posterPath
+      posterPath: savedPosterLocalPath, // posterPath
       actors: filmQueryData.actors,
       releaseDate: filmQueryData.releaseDate,
       director: filmQueryData.director,
