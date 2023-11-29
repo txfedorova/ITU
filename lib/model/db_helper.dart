@@ -34,12 +34,12 @@ class DatabaseHelper {
       CREATE TABLE films (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT NOT NULL,
-        year INTEGER NOT NULL,
-        duration TIME,
+        releaseDate TEXT NOT NULL,
+        duration TEXT,
         director TEXT,
-        description TEXT,
+        overview TEXT,
         actors TEXT,
-        image TEXT
+        posterPath TEXT
       )
     ''');
 

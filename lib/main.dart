@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:itu_app/controller/comment_controller.dart';
 import 'package:itu_app/view/comments_screen.dart';
 import 'package:itu_app/view/gallery_screen.dart';
-import 'package:itu_app/view/film_edit_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
 import 'package:itu_app/view/film_query_screen.dart';
 import 'package:itu_app/view/home_screen.dart';
@@ -62,10 +61,6 @@ GoRouter router() {
         path: '/filmGallery',
         builder: (context, state) => const GalleryScreen(),
        
-      ),
-      GoRoute(
-        path: '/editScreen',
-        builder: (context, state) => const FilmEditScreen(),
       ),
       GoRoute(
         path: '/queryScreen',

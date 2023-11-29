@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:itu_app/model/film_model.dart';
 import 'package:itu_app/controller/film_controller.dart';
-import 'package:itu_app/common/utils.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'dart:io';
 
 
 class _FilmQueryData {
@@ -31,6 +36,8 @@ class _FilmQueryResults {
   final String apiKey = 'c1e3556e0182098dbaff3210c89a584e';
   final String readAccessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWUzNTU2ZTAxODIwOThkYmFmZjMyMTBjODlhNTg0ZSIsInN1YiI6IjY1NjYxYzAwODlkOTdmMDBlMTcyZmUyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Rk1-fBcVDmw5XDQ6ww7LHKkgidnmBMhPqiM6SZvZWO0';
 
+  final int maxResults = 10;
+
   List<_FilmQueryData> films = [];
 
   late TMDB tmdb;
@@ -39,7 +46,7 @@ class _FilmQueryResults {
     tmdb = TMDB(
       ApiKeys(apiKey, readAccessToken), 
       logConfig: const ConfigLogger.showAll(),
-      defaultLanguage:'en-US'
+      //defaultLanguage:'en-US'
       
     );
   }
@@ -48,12 +55,31 @@ class _FilmQueryResults {
   static Future<_FilmQueryResults> create(String movieTitle) async {
     print("create() (public factory)");
 
+    
+
+
     // Call the private constructor
     var fqr = _FilmQueryResults._create(movieTitle);
 
     // Do initialization that requires async
     String query = Uri.encodeComponent(movieTitle);
     Map response = await fqr.tmdb.v3.search.queryMovies(query, includeAdult: true);
+
+  // Check movieTitle format (not empty, not only spaces, cannot contain only numbers)
+    if (movieTitle.isEmpty || movieTitle.trim().isEmpty) {
+      print('******Empty movie title');
+      return fqr;
+    }
+
+    if (response['results'].isEmpty) {
+      print("******No results");
+      return fqr;
+    }
+
+    // Limit the number of results
+    if (response['results'].length > fqr.maxResults) {
+      response['results'].length = fqr.maxResults;
+    }
 
     bool atLeastOneContainsPoster = false;
 
@@ -135,9 +161,6 @@ class _MyHomePageState extends State<FilmQueryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -175,9 +198,15 @@ class _MyHomePageState extends State<FilmQueryScreen> {
               },
               child: const Text('Search'),
             ),
-            filmQueryResults == null
-              ? const SizedBox(height: 5)
-              : _QueryResultsList(filmQueryResults!),
+            ((){
+              if (filmQueryResults == null) {
+                return const SizedBox.shrink();
+              } else if (filmQueryResults!.films.isEmpty) {
+                return const Text("No films found with such parameters :(");
+              } else {
+                return _QueryResultsList(filmQueryResults!);
+              }
+            })()
           ],
         ),
       ),
@@ -187,27 +216,13 @@ class _MyHomePageState extends State<FilmQueryScreen> {
 
 class _QueryResultsList extends StatelessWidget {
   final _FilmQueryResults filmQueryResults;
-  ScrollController _controller = ScrollController();
 
   _QueryResultsList(this.filmQueryResults, {Key? key} ) : super(key: key) {
-    print("Query results: $filmQueryResults");
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);//the listener for up and down. 
-  }
-
-  _scrollListener() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-      !_controller.position.outOfRange) {
-    }
-    if (_controller.offset <= _controller.position.minScrollExtent &&
-      !_controller.position.outOfRange) {
-    }
+    print("*****Query results: $filmQueryResults");
   }
   
   @override
   Widget build(BuildContext context) {
-    // final filmController = Provider.of<FilmController>(context);
-    // final films = filmController.films; 
 
     return Expanded(
       child: ListView.builder(
@@ -225,14 +240,93 @@ class _QueryResult extends StatelessWidget {
   final double posterHeight = 200;
   final double rowSpace = 10;
 
+  final String tmdbImageBaseUrl = "https://image.tmdb.org/t/p/w500";
+
   const _QueryResult(this.filmQueryData, {Key? key}) : super(key: key);
+
+
+  Future<String> downloadPoster() async {
+    // Set the flag to true
+    // setState(() {
+    //   _isDownloading = true;
+    // });
+
+    String url = "${tmdbImageBaseUrl}${filmQueryData.posterPath}";
+    final imageName = path.basename(url);
+
+    // Check if the image is already downloaded
+
+    // Get the image name
+    // Get the document directory path
+    final appDir = await path_provider.getApplicationDocumentsDirectory();
+    // This is the saved image path
+    final localPath = path.join(appDir.path, imageName);
+
+    // Print out all image paths in documents directory
+    final savedImages = appDir.listSync();
+
+    int i = 0;
+    for (var image in savedImages) {
+      if (image.path.contains(".jpg") || image.path.contains(".png")) {
+        print("********Saved image[${i.toString()}]: ${image.path}");
+      }
+      i++;
+    }
+
+    // if (File(localPath).existsSync()) {
+    //   setState(() {
+    //     _isDownloading = false;
+    //     _displayImage = File(localPath);
+    //   });
+    //   return;
+    // }
+
+    
+
+
+
+    print("********Downloading $url");
+
+    final response = await http.get(Uri.parse(url));
+
+    
+    
+
+
+    
+
+    // Download the image
+    final imageFile = File(localPath);
+    await imageFile.writeAsBytes(response.bodyBytes);
+
+    return localPath;
+  }
+
+  void addFilmToDatabase(FilmController controller) async {
+    // Download image from posterPath and save it locally
+    String localPath = await downloadPoster();
+
+    Film film = Film(
+      title: filmQueryData.title,
+      overview: filmQueryData.overview,
+      posterPath: localPath, // posterPath
+      actors: filmQueryData.actors,
+      releaseDate: filmQueryData.releaseDate,
+      director: filmQueryData.director,
+      duration: filmQueryData.duration,
+    );
+
+    controller.insertFilm(film);
+  }
 
   @override
   Widget build(BuildContext context) {
  
     return InkWell(
       onTap: () => {
-        //print("Tapped on ${result['title']}")
+        print("********Tapped on ${filmQueryData.title}"),
+        addFilmToDatabase(context.read<FilmController>()),
+        context.pop() // Go back to the previous screen
       },
       child: SizedBox(
         child: Column(
@@ -247,7 +341,6 @@ class _QueryResult extends StatelessWidget {
                     image: NetworkImage(
                       "https://image.tmdb.org/t/p/w500${filmQueryData.posterPath}"
                     ),
-                    //fit: BoxFit.fill,
                   )
                 )
               )
