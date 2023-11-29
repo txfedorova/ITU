@@ -39,7 +39,8 @@ class DatabaseHelper {
         director TEXT,
         overview TEXT,
         actors TEXT,
-        posterPath TEXT
+        posterPath TEXT,
+        UNIQUE(title, releaseDate)
       )
     ''');
 

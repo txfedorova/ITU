@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'dart:io';
+
 import 'package:itu_app/model/film_model.dart';
 import 'package:itu_app/controller/film_controller.dart';
 
@@ -76,9 +80,9 @@ class FilmsList extends StatelessWidget {
 }
 
 class _ListEntry extends StatelessWidget {
-  final Film item;
+  final Film film;
 
-  const _ListEntry(this.item);
+  const _ListEntry(this.film);
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +95,9 @@ class _ListEntry extends StatelessWidget {
 		child: Row(
 		  children: [
 			Expanded(
-			  child: Text(item.title, style: textTheme),
+			  child: Text(film.title, style: textTheme),
 			),
-			_ListEntryDeleteButton(item: item),
+			_ListEntryDeleteButton(film: film),
 		  ],
 		),
 	  ),
@@ -102,22 +106,24 @@ class _ListEntry extends StatelessWidget {
 }
 
 class _ListEntryDeleteButton extends StatelessWidget {
-  final Film item;
+  final Film film;
 
-  const _ListEntryDeleteButton({required this.item});
+  const _ListEntryDeleteButton({required this.film});
+
+  void deleteFilmFromDatabase(FilmController controller) {
+    controller.deleteFilm(film.id!);
+
+    // Delete the image from the device
+    var file = File(film.posterPath);
+    file.delete();
+  }
 
   @override
   Widget build(BuildContext context) {
 		return TextButton(
 			onPressed: () {
-				var model = context.read<FilmController>();
-				model.deleteFilm(item.id!);
+				deleteFilmFromDatabase(context.read<FilmController>());
 			},
-			style: ButtonStyle(
-				overlayColor: MaterialStateProperty.resolveWith<Color?>((states) {
-					return null; // Defer to the widget's default.
-				}),
-			),
 			child: const Icon(Icons.recycling, semanticLabel: 'DELETE'),
 		);
   }

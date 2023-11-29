@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:itu_app/controller/film_controller.dart';
 import 'package:itu_app/model/film_model.dart';
 
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as path_provider;
 import 'dart:io';
 
 class GalleryScreen extends StatelessWidget {
@@ -70,21 +66,49 @@ class _CardSwiperWidgetState extends State<_CardSwiper> {
       controller: cardSwiperController,
       cardsCount: widget.films.length,
       cardBuilder: (BuildContext context, int index, __, ___) {
+        Film currentFilm = widget.films[index];
+        double posterHeight = screenSize.height * 0.4;
+
         return InkWell(
           onTap: () {
-            int filmId = widget.films[index].id!;
+            int filmId = currentFilm.id!;
             // Open the comments screen for the selected film
             context.push('/listFilms/$filmId/comments');
           },
           child: Container(
-            width: screenSize.width,
-            height: screenSize.height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: Image.file(File(widget.films[index].posterPath)).image,
-                fit: BoxFit.cover,
-              ),
+            color: Colors.orangeAccent[100],
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment : MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                currentFilm.posterPath != "<No poster>" ?
+                Container(
+                  //width: screenSize.width,
+                  height: posterHeight,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: Image.file(File(currentFilm.posterPath)).image,
+                      //fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+                : SizedBox(height: posterHeight, child: const Text("<No poster>")),
+                const SizedBox(height: 5),
+                Text(currentFilm.title),
+                const SizedBox(height: 5),
+                Text("Overview: ${currentFilm.overview}"),
+                const SizedBox(height: 5),
+                Text("Release date: ${currentFilm.releaseDate}"),
+                const SizedBox(height: 5),
+                Text("Actors: ${currentFilm.actors}"),
+                const SizedBox(height: 5),
+                Text("Director: ${currentFilm.director}"),
+                const SizedBox(height: 5),
+                Text("Duration: ${currentFilm.duration}"),
+                const SizedBox(height: 30),
+              ],
             ),
           ),
         );

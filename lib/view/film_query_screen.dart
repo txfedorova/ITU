@@ -14,22 +14,6 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'dart:io';
 
-
-class _FilmQueryData {
-  String title = "<No title>";
-  String overview = "<No overview>";
-  String posterPath = "<No poster>";
-  //String popularity = "<No popularity>";
-  String actors = "<No actors>";
-  String releaseDate = "<No release date>";
-  String director = "<No director>";
-  String duration = "<No duration>";
-
-  //_FilmQueryData([this.title, this.overview, this.posterPath, this.popularity]);
-  _FilmQueryData();
-}
-
-
 // https://stackoverflow.com/questions/38933801/calling-an-async-method-from-a-constructor-in-dart
 class _FilmQueryResults {
   // Key and token copied from my TMDB profile
@@ -38,7 +22,7 @@ class _FilmQueryResults {
 
   final int maxResults = 10;
 
-  List<_FilmQueryData> films = [];
+  List<Film> films = [];
 
   late TMDB tmdb;
 
@@ -54,9 +38,6 @@ class _FilmQueryResults {
   /// Public factory
   static Future<_FilmQueryResults> create(String movieTitle) async {
     print("create() (public factory)");
-
-    
-
 
     // Call the private constructor
     var fqr = _FilmQueryResults._create(movieTitle);
@@ -96,7 +77,7 @@ class _FilmQueryResults {
         continue;
       }
 
-      _FilmQueryData fqd = _FilmQueryData();
+      Film fqd = Film();
 
       fqd.title = result['title'];
       fqd.overview = result['overview'];
@@ -236,24 +217,19 @@ class _QueryResultsList extends StatelessWidget {
 }
 
 class _QueryResult extends StatelessWidget {
-  final _FilmQueryData filmQueryData;
+  final Film queriedFilm;
   final double posterHeight = 200;
   final double rowSpace = 10;
 
   final String tmdbImageBaseUrl = "https://image.tmdb.org/t/p/w500";
 
-  const _QueryResult(this.filmQueryData, {Key? key}) : super(key: key);
+  const _QueryResult(this.queriedFilm, {Key? key}) : super(key: key);
 
 
   Future<String> downloadPoster() async {
-    // Set the flag to true
-    // setState(() {
-    //   _isDownloading = true;
-    // });
 
-    String url = "${tmdbImageBaseUrl}${filmQueryData.posterPath}";
-    //final imageName = path.basename(url);
-    final imageName = "${filmQueryData.title}.jpg";
+    String url = "${tmdbImageBaseUrl}${queriedFilm.posterPath}";
+    final imageName = "${queriedFilm.title}.jpg";
 
     // Check if the image is already downloaded
 
@@ -274,27 +250,9 @@ class _QueryResult extends StatelessWidget {
       i++;
     }
 
-    // if (File(localPath).existsSync()) {
-    //   setState(() {
-    //     _isDownloading = false;
-    //     _displayImage = File(localPath);
-    //   });
-    //   return;
-    // }
-
-    
-
-
-
     print("********Downloading $url");
 
     final response = await http.get(Uri.parse(url));
-
-    
-    
-
-
-    
 
     // Download the image
     final imageFile = File(localPath);
@@ -307,15 +265,8 @@ class _QueryResult extends StatelessWidget {
     // Download image from posterPath and save it locally
     String savedPosterLocalPath = await downloadPoster();
 
-    Film film = Film(
-      title: filmQueryData.title,
-      overview: filmQueryData.overview,
-      posterPath: savedPosterLocalPath, // posterPath
-      actors: filmQueryData.actors,
-      releaseDate: filmQueryData.releaseDate,
-      director: filmQueryData.director,
-      duration: filmQueryData.duration,
-    );
+    Film film = queriedFilm;
+    film.posterPath = savedPosterLocalPath;
 
     controller.insertFilm(film);
   }
@@ -325,7 +276,7 @@ class _QueryResult extends StatelessWidget {
  
     return InkWell(
       onTap: () => {
-        print("********Tapped on ${filmQueryData.title}"),
+        print("********Tapped on ${queriedFilm.title}"),
         addFilmToDatabase(context.read<FilmController>()),
         context.pop() // Go back to the previous screen
       },
@@ -334,30 +285,30 @@ class _QueryResult extends StatelessWidget {
           mainAxisAlignment : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            filmQueryData.posterPath != "<No poster>" ?
+            queriedFilm.posterPath != "<No poster>" ?
               Container(
                 height: posterHeight,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                      "https://image.tmdb.org/t/p/w500${filmQueryData.posterPath}"
+                      "https://image.tmdb.org/t/p/w500${queriedFilm.posterPath}"
                     ),
                   )
                 )
               )
             : SizedBox(height: posterHeight, child: const Text("<No poster>")),
             const SizedBox(height: 5),
-            Text(filmQueryData.title),
+            Text(queriedFilm.title),
             const SizedBox(height: 5),
-            Text("Overview: ${filmQueryData.overview}"),
+            Text("Overview: ${queriedFilm.overview}"),
             const SizedBox(height: 5),
-            Text("Release date: ${filmQueryData.releaseDate}"),
+            Text("Release date: ${queriedFilm.releaseDate}"),
             const SizedBox(height: 5),
-            Text("Actors: ${filmQueryData.actors}"),
+            Text("Actors: ${queriedFilm.actors}"),
             const SizedBox(height: 5),
-            Text("Director: ${filmQueryData.director}"),
+            Text("Director: ${queriedFilm.director}"),
             const SizedBox(height: 5),
-            Text("Duration: ${filmQueryData.duration}"),
+            Text("Duration: ${queriedFilm.duration}"),
             const SizedBox(height: 30),
           ],
         ),

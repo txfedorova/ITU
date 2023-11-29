@@ -4,24 +4,15 @@ class Film {
   // The id is set by the database automatically when inserting a new film.
   final int? id;
 
-  final String title;
-  final String releaseDate;
-  final String duration;
-  final String posterPath;
-  final String director;
-  final String overview;
-  final String actors;
-
+  String title = "<No title>";
+  String overview = "<No overview>";
+  String posterPath = "<No poster>";
+  String actors = "<No actors>";
+  String releaseDate = "<No release date>";
+  String director = "<No director>";
+  String duration = "<No duration>";
   // Id must be set by the database automatically when inserting a new film.
-  Film(
-      {required this.title,
-      required this.releaseDate,
-      this.duration = '',
-      this.director = '',
-      this.overview = '',
-      this.actors = '',
-      this.posterPath = ''})
-      : id = null;
+  Film() : id = null;
 
   Film.fromMap(Map<String, dynamic> map)
       : id = map['id'] as int,
