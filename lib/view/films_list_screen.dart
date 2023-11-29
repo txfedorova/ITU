@@ -60,19 +60,19 @@ class FilmsList extends StatelessWidget {
 						future: films,
 						builder: (context, snapshot) {
 							if (snapshot.hasData) {
-							// Display the list of films
-							return Expanded(
-								child: ListView.separated(
-								itemBuilder: (_, index) =>
-									_ListEntry(snapshot.data![index]),
-								separatorBuilder: (_, __) => const Divider(),
-								itemCount: snapshot.data!.length,
-								),
-							);
+                // Display the list of films
+                return Expanded(
+                  child: ListView.separated(
+                  itemBuilder: (_, index) =>
+                    _ListEntry(snapshot.data![index]),
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemCount: snapshot.data!.length,
+                  ),
+                );
 							} else if (snapshot.hasError) {
-							return Text("${snapshot.error}");
+							  return Text("${snapshot.error}");
 							}
-							return const CircularProgressIndicator();
+              return const CircularProgressIndicator();
 						},
 					),
 					],
