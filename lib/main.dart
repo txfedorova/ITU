@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:itu_app/controller/comment_controller.dart';
+import 'package:itu_app/view/comments_screen.dart';
 import 'package:itu_app/view/gallery_screen.dart';
 import 'package:itu_app/view/film_edit_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
@@ -16,8 +18,15 @@ import 'package:itu_app/controller/film_controller.dart';
 
 void main() {
   setupWindow();
-  runApp(ChangeNotifierProvider(
-    create: (context) => FilmController(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => FilmController()
+      ),
+      ChangeNotifierProvider(
+        create: (context) => CommentController()
+      ),
+    ],
     child: const MyApp()
   ));
 }
@@ -65,6 +74,12 @@ GoRouter router() {
       GoRoute(
         path: '/listFilms',
         builder: (context, state) => const FilmsList(),
+        routes: [
+          GoRoute(
+            path: ':filmId/comments',
+            builder: (context, state) => CommentsScreen(filmIndex: int.parse(state.pathParameters['filmId']!)),
+          ),
+        ]
       ),
     ],
   );

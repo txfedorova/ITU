@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+
 import 'package:itu_app/model/comment_model.dart';
 import 'package:itu_app/controller/comment_controller.dart';
 
 class CommentsScreen extends StatefulWidget {
   final int filmIndex;
 
-  const CommentsScreen({Key? key, required this.filmIndex}) : super(key: key);
+  const CommentsScreen({required this.filmIndex, Key? key}) : super(key: key);
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  final CommentController _commentController = CommentController();
+  //final CommentController _commentController = CommentController();
   final TextEditingController _commentTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var filmComments = context.watch<CommentController>().comments(widget.filmIndex);
+
+    print("\n\nBUILDING LIST COMMENTS\n\n");
+		// comments.then((comments) {
+		// 	for (var comment in comments) {
+		// 	  print(comment.text);
+		// 	}
+		// });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Comments'),
@@ -25,7 +37,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         children: [
           Expanded(
             child: FutureBuilder<List<Comment>>(
-              future: _commentController.comments(widget.filmIndex),
+              future: filmComments,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -59,8 +71,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 IconButton(
                   icon: const Icon(Icons.send),
                   onPressed: () {
+                    var commentController = context.read<CommentController>();
                     // Add the new comment
-                    _commentController.insertComment(
+                    commentController.insertComment(
                       Comment(
                         filmId: widget.filmIndex,
                         text: _commentTextController.text,
@@ -81,7 +94,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   void dispose() {
-    _commentController.dispose();
+    //_commentController.dispose();
     _commentTextController.dispose();
     super.dispose();
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'comments_screen.dart';
+
+import 'package:go_router/go_router.dart';
+
+import 'package:itu_app/view/comments_screen.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
@@ -26,15 +29,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
           controller: _controller,
           cardsCount: imageNames.length,
           cardBuilder: (context, index, _, __) {
-            return GestureDetector(
+            return InkWell(
               onTap: () {
                 // Open the comments screen for the selected film
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CommentsScreen(filmIndex: index),
-                  ),
-                );
+                context.push('/listFilms/$index/comments');
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => CommentsScreen(filmIndex: index),
+                //   ),
+                // );
               },
               child: SizedBox(
                 width: screenSize.width,
