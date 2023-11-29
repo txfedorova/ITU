@@ -17,14 +17,14 @@ class DatabaseHelper {
     if (_database != null) {
       return _database!;
     }
-    
+
     _database = await _initDatabase();
     return _database!;
   }
 
   Future<Database> _initDatabase() async {
     final path = join(await getDatabasesPath(), _databaseName);
-    return openDatabase(path, version: 1, onCreate: _onCreate);
+    return openDatabase(path, version: 2, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -42,11 +42,21 @@ class DatabaseHelper {
         image TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE comments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        film_id INTEGER NOT NULL,
+        text TEXT NOT NULL,
+        timestamp TEXT NOT NULL,
+        FOREIGN KEY (film_id) REFERENCES films (id)
+      )''');
   }
 
   Future<void> clearDatabase() async {
     try {
-      final databaseFile = join(await getDatabasesPath(), _databaseName); // Replace with your database file name
+      final databaseFile = join(await getDatabasesPath(),
+          _databaseName); // Replace with your database file name
 
       await deleteDatabase(databaseFile);
       print('DATABASE DELETED\n\n\n');

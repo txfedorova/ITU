@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'comments_screen.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
@@ -25,14 +26,27 @@ class _GalleryScreenState extends State<GalleryScreen> {
           controller: _controller,
           cardsCount: imageNames.length,
           cardBuilder: (context, index, _, __) {
-            return SizedBox(
-              width: screenSize.width,
-              height: screenSize.height,
-              child: Image.asset('images/${imageNames[index]}', fit: BoxFit.cover),
+            return GestureDetector(
+              onTap: () {
+                // Open the comments screen for the selected film
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(filmIndex: index),
+                  ),
+                );
+              },
+              child: SizedBox(
+                width: screenSize.width,
+                height: screenSize.height,
+                child: Image.asset('images/${imageNames[index]}',
+                    fit: BoxFit.cover),
+              ),
             );
           },
           onSwipe: (previousIndex, currentIndex, direction) {
-            debugPrint('Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
+            debugPrint(
+                'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
             return true;
           },
           numberOfCardsDisplayed: 2,
