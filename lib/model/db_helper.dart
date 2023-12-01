@@ -52,6 +52,13 @@ class DatabaseHelper {
         timestamp TEXT NOT NULL,
         FOREIGN KEY (film_id) REFERENCES films (id)
       )''');
+
+    await db.execute('''
+      CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        name TEXT NOT NULL
+      )
+    ''');
   }
 
   Future<void> clearDatabase() async {
@@ -65,4 +72,28 @@ class DatabaseHelper {
       print('ERROR DELETING DATABASE: $e\n\n\n');
     }
   }
+
+  Future<void> insertUser(String name) async {
+    final db = await database;
+    await db.insert(
+      'users',
+      {'name': name},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteUser(int id) async {
+    final db = await database;
+    await db.delete(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getUsers() async {
+    final db = await database;
+    return await db.query('users');
+  }
 }
+

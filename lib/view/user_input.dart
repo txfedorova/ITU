@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../controller/user_controller.dart';
 
 class UserInputWidget extends StatefulWidget {
   const UserInputWidget({super.key});
@@ -9,29 +10,39 @@ class UserInputWidget extends StatefulWidget {
 
 class _UserInputWidgetState extends State<UserInputWidget> {
   final TextEditingController _nameController = TextEditingController();
-  final List<String> users = [];
+  final UserController _userController = UserController();
+  List<Map<String, dynamic>> users = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsers();
+  }
+
+  void _loadUsers() async {
+    var allUsers = await _userController.getUsers();
+    setState(() {
+      users = allUsers;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Column(
-          children: users.asMap().entries.map((entry) {
-            final int index = entry.key;
-            final String user = entry.value;
+          children: users.map((user) {
             return SizedBox(
               height: 55,
               child: Card(
-                margin: const EdgeInsets.all(3.0), // Add margin for spacing
+                margin: const EdgeInsets.all(3.0),
                 child: ListTile(
-                  title: Text(user),
+                  title: Text(user['name']),
                   trailing: IconButton(
-                    icon: const Icon(Icons.close), // X icon for delete
-                    onPressed: () {
-                      // Remove the user from the list
-                      setState(() {
-                        users.removeAt(index);
-                      });
+                    icon: const Icon(Icons.close),
+                    onPressed: () async {
+                      await _userController.removeUser(user['id']);
+                      _loadUsers();
                     },
                   ),
                 ),
@@ -44,35 +55,28 @@ class _UserInputWidgetState extends State<UserInputWidget> {
           child: TextField(
             controller: _nameController,
             decoration: const InputDecoration(
-              hintText: 'User Name', // Display the hint text
-              hintStyle:
-                  TextStyle(color: Colors.grey), // Style for the hint text
+              hintText: 'User Name',
+              hintStyle: TextStyle(color: Colors.grey),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: Colors.black), // Border color when focused
+                borderSide: BorderSide(color: Colors.black),
               ),
             ),
           ),
         ),
         const SizedBox(height: 6),
-       
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(20), // Adjust the radius as needed
+              borderRadius: BorderRadius.circular(20),
             ),
             padding: const EdgeInsets.all(14),
           ),
-          onPressed: () {
+          onPressed: () async {
             final userName = _nameController.text;
             if (userName.isNotEmpty) {
-              setState(() {
-                users.add(userName);
-              });
-              // Add user to your data source or perform the necessary action
-              // You can use context.read<UserController>().addUser(userName);
-              _nameController.clear(); // Clear the input field
+              await _userController.addUser(userName);
+              _nameController.clear();
+              _loadUsers();
             }
           },
           child: const Text(
