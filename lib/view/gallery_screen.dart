@@ -10,41 +10,33 @@ import 'dart:io';
 
 class GalleryScreen extends StatelessWidget {
   //final CardSwiperController cardSwiperController = CardSwiperController();
-  
+
   const GalleryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     var futureFilms = context.watch<FilmController>().films();
 
-    
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
       ),
       body: FutureBuilder(
-        future: futureFilms,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          } else {
-            List<Film> films = snapshot.data ?? [];
-            //List<String> imageNames = films.map((film) => film.title).toList();
-            return SafeArea(
-              child: _CardSwiper(films)
-            );
-          }
-        }
-      ),
+          future: futureFilms,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            } else {
+              List<Film> films = snapshot.data ?? [];
+              //List<String> imageNames = films.map((film) => film.title).toList();
+              return SafeArea(child: _CardSwiper(films));
+            }
+          }),
     );
   }
-
-
 }
-
 
 class _CardSwiper extends StatefulWidget {
   final List<Film> films;
@@ -79,22 +71,24 @@ class _CardSwiperWidgetState extends State<_CardSwiper> {
             color: Colors.orangeAccent[100],
             padding: const EdgeInsets.all(20),
             child: Column(
-              mainAxisAlignment : MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                currentFilm.posterPath != "<No poster>" ?
-                Container(
-                  //width: screenSize.width,
-                  height: posterHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: Image.file(File(currentFilm.posterPath)).image,
-                      //fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-                : SizedBox(height: posterHeight, child: const Text("<No poster>")),
+                currentFilm.posterPath != "<No poster>"
+                    ? Container(
+                        //width: screenSize.width,
+                        height: posterHeight,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            image:
+                                Image.file(File(currentFilm.posterPath)).image,
+                            //fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        height: posterHeight, child: const Text("<No poster>")),
                 const SizedBox(height: 5),
                 Text(currentFilm.title),
                 const SizedBox(height: 5),
@@ -130,4 +124,3 @@ class _CardSwiperWidgetState extends State<_CardSwiper> {
     super.dispose();
   }
 }
-

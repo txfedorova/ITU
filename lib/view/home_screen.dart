@@ -23,9 +23,17 @@ class HomeScreen extends StatelessWidget {
               // User input section with scrolling
               Expanded(
                 child: ListView(
-                  children: const [
-                    // Include the UserInputWidget here
-                    UserInputWidget(), // This is the user input section
+                  children: [
+                    UserInputWidget(
+                      // onUserAdded: () {
+                      //   // Callback function to navigate to film gallery screen
+                      //   context.push('/filmGallery');
+                      // },
+                      onUserSelected: (userId) {
+                        // Callback function to navigate to film gallery with selected user's ID
+                        context.push('/filmGallery');
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -59,6 +59,17 @@ class DatabaseHelper {
         name TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE user_films (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        user_id INTEGER NOT NULL,
+        film_id INTEGER NOT NULL,
+        choise INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id),
+        FOREIGN KEY (film_id) REFERENCES films (id)
+      )
+    ''');
   }
 
   Future<void> clearDatabase() async {
@@ -80,6 +91,7 @@ class DatabaseHelper {
       {'name': name},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    print('USER ADDED\n\n\n');
   }
 
   Future<void> deleteUser(int id) async {
@@ -96,4 +108,3 @@ class DatabaseHelper {
     return await db.query('users');
   }
 }
-

@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import '../controller/user_controller.dart';
 
 class UserInputWidget extends StatefulWidget {
-  const UserInputWidget({super.key});
+  // final VoidCallback onUserAdded;
+  final void Function(int userId) onUserSelected;
+
+  const UserInputWidget({
+    Key? key,
+    // required this.onUserAdded,
+    required this.onUserSelected,
+  }) : super(key: key);
 
   @override
   State<UserInputWidget> createState() => _UserInputWidgetState();
@@ -38,6 +45,10 @@ class _UserInputWidgetState extends State<UserInputWidget> {
                 margin: const EdgeInsets.all(3.0),
                 child: ListTile(
                   title: Text(user['name']),
+                  onTap: () {
+                    // Callback function when a user is selected
+                    widget.onUserSelected(user['id']);
+                  },
                   trailing: IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () async {
@@ -77,6 +88,8 @@ class _UserInputWidgetState extends State<UserInputWidget> {
               await _userController.addUser(userName);
               _nameController.clear();
               _loadUsers();
+
+              // widget.onUserAdded();
             }
           },
           child: const Text(

@@ -17,17 +17,10 @@ import 'package:itu_app/controller/film_controller.dart';
 
 void main() {
   setupWindow();
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => FilmController()
-      ),
-      ChangeNotifierProvider(
-        create: (context) => CommentController()
-      ),
-    ],
-    child: const MyApp()
-  ));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => FilmController()),
+    ChangeNotifierProvider(create: (context) => CommentController()),
+  ], child: const MyApp()));
 }
 
 const double windowWidth = 400;
@@ -60,22 +53,21 @@ GoRouter router() {
       GoRoute(
         path: '/filmGallery',
         builder: (context, state) => const GalleryScreen(),
-       
       ),
       GoRoute(
         path: '/queryScreen',
         builder: (context, state) => const FilmQueryScreen(),
       ),
       GoRoute(
-        path: '/listFilms',
-        builder: (context, state) => const FilmsList(),
-        routes: [
-          GoRoute(
-            path: ':filmId/comments',
-            builder: (context, state) => CommentsScreen(filmIndex: int.parse(state.pathParameters['filmId']!)),
-          ),
-        ]
-      ),
+          path: '/listFilms',
+          builder: (context, state) => const FilmsList(),
+          routes: [
+            GoRoute(
+              path: ':filmId/comments',
+              builder: (context, state) => CommentsScreen(
+                  filmIndex: int.parse(state.pathParameters['filmId']!)),
+            ),
+          ]),
     ],
   );
 }
@@ -89,7 +81,7 @@ class MyApp extends StatelessWidget {
       title: "Title",
       routerConfig: router(),
       debugShowCheckedModeBanner: false,
-       theme: ThemeData(
+      theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF59B773),
           secondary: const Color(0xFF59B773),
@@ -98,5 +90,5 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.black)),
       ),
     );
-  }   
+  }
 }

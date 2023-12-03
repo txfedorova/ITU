@@ -65,6 +65,18 @@ class FilmController extends ChangeNotifier {
     await _databaseHelper.clearDatabase();
     notifyListeners();
   }
+
+  Future<List<Film>> getUnseenFilms(int userId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT * FROM films WHERE id NOT IN (
+        SELECT film_id FROM user_films WHERE user_id = $userId
+      )
+    ''');
+    return List.generate(maps.length, (i) {
+      return Film.fromMap(maps[i]);
+    });
+  }
 }
 
 //https://docs.flutter.dev/data-and-backend/serialization/json
