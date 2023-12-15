@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                       // },
                       onUserSelected: (userId) {
                         // Callback function to navigate to film gallery with selected user's ID
-                        context.push('/filmGallery');
+                        context.push('/filmGallery/$userId');
                       },
                     ),
                   ],

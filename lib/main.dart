@@ -53,8 +53,11 @@ GoRouter router() {
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
-        path: '/filmGallery',
-        builder: (context, state) => const GalleryScreen(),
+        path: '/filmGallery/:userId',
+        builder: (context, state) {
+          final userId = int.parse(state.pathParameters['userId']!);
+          return GalleryScreen(userId: userId);
+        },
       ),
       GoRoute(
         path: '/queryScreen',

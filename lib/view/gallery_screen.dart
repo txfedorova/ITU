@@ -12,7 +12,8 @@ import 'package:itu_app/model/film_model.dart';
 import 'dart:io';
 
 class GalleryScreen extends StatelessWidget {
-  const GalleryScreen({Key? key}) : super(key: key);
+  final int userId;
+  const GalleryScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class GalleryScreen extends StatelessWidget {
             }
 
             return SafeArea(
-              child: FilmSwiper(films: films),
+              child: FilmSwiper(films: films, userId: userId),
             );
           }
         },
@@ -50,8 +51,10 @@ class GalleryScreen extends StatelessWidget {
 
 class FilmSwiper extends StatefulWidget {
   final List<Film> films;
+  final int userId;
 
-  const FilmSwiper({Key? key, required this.films}) : super(key: key);
+  const FilmSwiper({Key? key, required this.films, required this.userId})
+      : super(key: key);
 
   @override
   _FilmSwiperState createState() => _FilmSwiperState();
@@ -70,28 +73,12 @@ class _FilmSwiperState extends State<FilmSwiper> {
     fetchViewedFilms();
   }
 
-  @override
-  void didUpdateWidget(covariant FilmSwiper oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // Check if the film list has changed
-    if (!listEquals(oldWidget.films, widget.films)) {
-      // Reset the CardSwiperController and other variables
-      cardSwiperController.dispose();
-      currentIndex = 0;
-      isRoundCompleted = false;
-
-      // Fetch the list of films that the user has already viewed
-      fetchViewedFilms();
-    }
-  }
-
   Future<void> fetchViewedFilms() async {
     List<UserFilms> viewedFilms = await Provider.of<UserFilmsController>(
             context,
             listen: false)
-        .userFilms(
-            1); // Assuming the user ID is 1, replace it with the actual user ID
+        .userFilms(widget
+            .userId); // Assuming the user ID is 1, replace it with the actual user ID
     setState(() {
       viewedFilmIds = viewedFilms.map((film) => film.filmId).toList();
     });
@@ -105,10 +92,11 @@ class _FilmSwiperState extends State<FilmSwiper> {
     List<Film> filteredFilms =
         widget.films.where((film) => !viewedFilmIds.contains(film.id)).toList();
 
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
         if (!isRoundCompleted && filteredFilms.isNotEmpty)
-          Expanded(
+          Positioned.fill(
             child: CardSwiper(
               controller: cardSwiperController,
               cardsCount: filteredFilms.length,
@@ -122,43 +110,45 @@ class _FilmSwiperState extends State<FilmSwiper> {
                     // Open the comments screen for the selected film
                     context.push('/listFilms/$filmId/comments');
                   },
-                  child: Container(
-                    color: Colors.orangeAccent[100],
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        currentFilm.posterPath != "<No poster>"
-                            ? Container(
-                                height: posterHeight,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  image: DecorationImage(
-                                    image:
-                                        Image.file(File(currentFilm.posterPath))
-                                            .image,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      color: Colors.orangeAccent[100],
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          currentFilm.posterPath != "<No poster>"
+                              ? Container(
+                                  height: posterHeight,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: DecorationImage(
+                                      image: Image.file(
+                                              File(currentFilm.posterPath))
+                                          .image,
+                                    ),
                                   ),
+                                )
+                              : SizedBox(
+                                  height: posterHeight,
+                                  child: const Text("<No poster>"),
                                 ),
-                              )
-                            : SizedBox(
-                                height: posterHeight,
-                                child: const Text("<No poster>"),
-                              ),
-                        const SizedBox(height: 5),
-                        Text(currentFilm.title),
-                        const SizedBox(height: 5),
-                        Text("Overview: ${currentFilm.overview}"),
-                        const SizedBox(height: 5),
-                        Text("Release date: ${currentFilm.releaseDate}"),
-                        const SizedBox(height: 5),
-                        Text("Actors: ${currentFilm.actors}"),
-                        const SizedBox(height: 5),
-                        Text("Director: ${currentFilm.director}"),
-                        const SizedBox(height: 5),
-                        Text("Duration: ${currentFilm.duration}"),
-                        const SizedBox(height: 30),
-                      ],
+                          const SizedBox(height: 5),
+                          Text(currentFilm.title),
+                          const SizedBox(height: 5),
+                          Text("Overview: ${currentFilm.overview}"),
+                          const SizedBox(height: 5),
+                          Text("Release date: ${currentFilm.releaseDate}"),
+                          const SizedBox(height: 5),
+                          Text("Actors: ${currentFilm.actors}"),
+                          const SizedBox(height: 5),
+                          Text("Director: ${currentFilm.director}"),
+                          const SizedBox(height: 5),
+                          Text("Duration: ${currentFilm.duration}"),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -182,11 +172,13 @@ class _FilmSwiperState extends State<FilmSwiper> {
                 if (direction.name == 'right') {
                   // Swiped right (liked), add the film to user's likes
                   Provider.of<UserFilmsController>(context, listen: false)
-                      .addUserFilm(1, filteredFilms[currentIndex!].id!, true);
+                      .addUserFilm(widget.userId,
+                          filteredFilms[previousIndex!].id!, true);
                 } else if (direction.name == 'left') {
                   // Swiped left (disliked), add the film to user's dislikes
                   Provider.of<UserFilmsController>(context, listen: false)
-                      .addUserFilm(1, filteredFilms[currentIndex!].id!, false);
+                      .addUserFilm(widget.userId,
+                          filteredFilms[previousIndex!].id!, false);
                 }
 
                 return true;
@@ -197,15 +189,15 @@ class _FilmSwiperState extends State<FilmSwiper> {
             ),
           ),
         if (isRoundCompleted || filteredFilms.isEmpty)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
+          Center(
+            child: Container(
+              width: 150, // Adjust the width as needed
+              height: 60, // Adjust the height as needed
+              child: ElevatedButton(
                 onPressed: () {
                   // Delete all rows in user_films for the user
                   Provider.of<UserFilmsController>(context, listen: false)
-                      .deleteAllUserFilms(
-                          1); // Replace 1 with the actual user ID
+                      .deleteAllUserFilms(widget.userId);
 
                   // Reset viewedFilmIds
                   setState(() {
@@ -215,7 +207,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
                 },
                 child: const Text('Swipe Again'),
               ),
-            ],
+            ),
           ),
       ],
     );
