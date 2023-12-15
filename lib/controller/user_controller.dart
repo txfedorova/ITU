@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import 'package:itu_app/model/db_helper.dart';
 
-class UserController {
+class UserController extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   Future<void> addUser(String name) async {

@@ -71,4 +71,5 @@ class UserFilmsController extends ChangeNotifier {
     notifyListeners();
     print('row in user_films deleted!\n\n');
   }
+  
 }

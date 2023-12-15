@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:itu_app/controller/comment_controller.dart';
+import 'package:itu_app/controller/user_controller.dart';
 import 'package:itu_app/controller/user_films_controller.dart';
+import 'package:itu_app/model/db_helper.dart';
 import 'package:itu_app/view/comments_screen.dart';
 import 'package:itu_app/view/gallery_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
@@ -11,6 +13,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:go_router/go_router.dart';
+import 'package:itu_app/view/stats_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:window_size/window_size.dart';
 
@@ -22,6 +25,8 @@ void main() {
     ChangeNotifierProvider(create: (context) => FilmController()),
     ChangeNotifierProvider(create: (context) => CommentController()),
     ChangeNotifierProvider(create: (context) => UserFilmsController()),
+    ChangeNotifierProvider(create: (context) => DatabaseHelper()),
+    ChangeNotifierProvider(create: (context) => UserController()),
   ], child: const MyApp()));
 }
 
@@ -51,6 +56,10 @@ GoRouter router() {
       GoRoute(
         path: '/homeScreen',
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/statsScreen',
+        builder: (context, state) => const StatsScreen(),
       ),
       GoRoute(
         path: '/filmGallery/:userId',

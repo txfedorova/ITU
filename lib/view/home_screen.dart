@@ -38,6 +38,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
+              ElevatedButton(
+                child: const Text('View results'),
+                onPressed: () {
+                  context.push('/statsScreen');
+                },
+              ),
               // Button to delete the database
               ElevatedButton(
                 child: const Text('Delete Database'),

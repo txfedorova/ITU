@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper {
+class DatabaseHelper extends ChangeNotifier{
   static final DatabaseHelper _instance = DatabaseHelper._privateConstructor();
   static Database? _database;
 
