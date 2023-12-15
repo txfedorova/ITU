@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:itu_app/controller/user_films_controller.dart';
@@ -67,6 +68,22 @@ class _FilmSwiperState extends State<FilmSwiper> {
     super.initState();
     // Fetch the list of films that the user has already viewed
     fetchViewedFilms();
+  }
+
+  @override
+  void didUpdateWidget(covariant FilmSwiper oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Check if the film list has changed
+    if (!listEquals(oldWidget.films, widget.films)) {
+      // Reset the CardSwiperController and other variables
+      cardSwiperController.dispose();
+      currentIndex = 0;
+      isRoundCompleted = false;
+
+      // Fetch the list of films that the user has already viewed
+      fetchViewedFilms();
+    }
   }
 
   Future<void> fetchViewedFilms() async {
@@ -150,7 +167,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
                 debugPrint(
                     'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
 
-                if (previousIndex == widget.films.length - 1) {
+                if (previousIndex == filteredFilms.length - 1) {
                   setState(() {
                     isRoundCompleted = true;
                   });
@@ -179,15 +196,26 @@ class _FilmSwiperState extends State<FilmSwiper> {
                   const Offset(-1000, 0), // Set a large negative offset
             ),
           ),
-        if (isRoundCompleted)
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isRoundCompleted = false;
-                cardSwiperController.undo();
-              });
-            },
-            child: const Text('Start Again'),
+        if (isRoundCompleted || filteredFilms.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Delete all rows in user_films for the user
+                  Provider.of<UserFilmsController>(context, listen: false)
+                      .deleteAllUserFilms(
+                          1); // Replace 1 with the actual user ID
+
+                  // Reset viewedFilmIds
+                  setState(() {
+                    viewedFilmIds = [];
+                    isRoundCompleted = false;
+                  });
+                },
+                child: const Text('Swipe Again'),
+              ),
+            ],
           ),
       ],
     );

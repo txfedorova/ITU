@@ -64,4 +64,11 @@ class UserFilmsController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deleteAllUserFilms(int userId) async {
+    final db = await _databaseHelper.database;
+    await db.delete('user_films', where: 'user_id = ?', whereArgs: [userId]);
+    notifyListeners();
+    print('row in user_films deleted!\n\n');
+  }
 }
