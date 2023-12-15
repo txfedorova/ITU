@@ -17,8 +17,8 @@ class UserFilmsController extends ChangeNotifier {
 
   Future<UserFilms> userFilm(int id) async {
     final db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('user_films', where: 'id = ?', whereArgs: [id], limit: 1);
+    final List<Map<String, dynamic>> maps = await db.query('user_films',
+        where: 'id = ?', whereArgs: [id], limit: 1);
     return UserFilms.fromMap(maps[0]);
   }
 
@@ -43,13 +43,25 @@ class UserFilmsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> insertUserFilm(UserFilms userFilm) async {
+  Future<void> addUserFilm(int userId, int filmId, bool liked) async {
     final db = await _databaseHelper.database;
-    await db.insert(
-      'user_films',
-      userFilm.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    notifyListeners();
+
+    // Check if the user already has this film
+    final existingUserFilm = await db.query('user_films',
+        where: 'user_id = ? AND film_id = ?', whereArgs: [userId, filmId]);
+
+    if (existingUserFilm.isEmpty) {
+      // If the film is not already in user films, insert it
+      await db.insert(
+        'user_films',
+        UserFilms(
+          userId: userId,
+          filmId: filmId,
+          choice: liked ? 1 : 0, // 1 for like, 0 for dislike
+        ).toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      notifyListeners();
+    }
   }
 }

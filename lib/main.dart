@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itu_app/controller/comment_controller.dart';
+import 'package:itu_app/controller/user_films_controller.dart';
 import 'package:itu_app/view/comments_screen.dart';
 import 'package:itu_app/view/gallery_screen.dart';
 import 'package:itu_app/view/films_list_screen.dart';
@@ -20,6 +21,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => FilmController()),
     ChangeNotifierProvider(create: (context) => CommentController()),
+    ChangeNotifierProvider(create: (context) => UserFilmsController()),
   ], child: const MyApp()));
 }
 

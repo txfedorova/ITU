@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:itu_app/controller/user_films_controller.dart';
+import 'package:itu_app/model/user_films_model.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,20 +60,43 @@ class _FilmSwiperState extends State<FilmSwiper> {
   final CardSwiperController cardSwiperController = CardSwiperController();
   int currentIndex = 0;
   bool isRoundCompleted = false;
+  List<int> viewedFilmIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the list of films that the user has already viewed
+    fetchViewedFilms();
+  }
+
+  Future<void> fetchViewedFilms() async {
+    List<UserFilms> viewedFilms = await Provider.of<UserFilmsController>(
+            context,
+            listen: false)
+        .userFilms(
+            1); // Assuming the user ID is 1, replace it with the actual user ID
+    setState(() {
+      viewedFilmIds = viewedFilms.map((film) => film.filmId).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
+    // Exclude films that the user has already viewed
+    List<Film> filteredFilms =
+        widget.films.where((film) => !viewedFilmIds.contains(film.id)).toList();
+
     return Column(
       children: [
-        if (!isRoundCompleted)
+        if (!isRoundCompleted && filteredFilms.isNotEmpty)
           Expanded(
             child: CardSwiper(
               controller: cardSwiperController,
-              cardsCount: widget.films.length,
+              cardsCount: filteredFilms.length,
               cardBuilder: (BuildContext context, int index, __, ___) {
-                Film currentFilm = widget.films[index];
+                Film currentFilm = filteredFilms[index];
                 double posterHeight = screenSize.height * 0.4;
 
                 return InkWell(
@@ -136,9 +161,20 @@ class _FilmSwiperState extends State<FilmSwiper> {
                   // You can add additional UI or show a button to restart
                 }
 
+                // Handle the swipe direction
+                if (direction.name == 'right') {
+                  // Swiped right (liked), add the film to user's likes
+                  Provider.of<UserFilmsController>(context, listen: false)
+                      .addUserFilm(1, filteredFilms[currentIndex!].id!, true);
+                } else if (direction.name == 'left') {
+                  // Swiped left (disliked), add the film to user's dislikes
+                  Provider.of<UserFilmsController>(context, listen: false)
+                      .addUserFilm(1, filteredFilms[currentIndex!].id!, false);
+                }
+
                 return true;
               },
-              numberOfCardsDisplayed: 2,
+              numberOfCardsDisplayed: 1,
               backCardOffset:
                   const Offset(-1000, 0), // Set a large negative offset
             ),

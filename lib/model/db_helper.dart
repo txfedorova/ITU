@@ -65,7 +65,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         user_id INTEGER NOT NULL,
         film_id INTEGER NOT NULL,
-        choise INTEGER NOT NULL,
+        choice INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users (id),
         FOREIGN KEY (film_id) REFERENCES films (id)
       )
