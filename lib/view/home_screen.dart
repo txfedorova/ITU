@@ -63,15 +63,15 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               // Button to delete the database
-              // ElevatedButton(
-              //   child: const Text(
-              //     'Delete Database',
-              //     style: TextStyle(fontSize: 20),
-              //   ),
-              //   onPressed: () async {
-              //     await _deleteDatabase(context);
-              //   },
-              // ),
+              ElevatedButton(
+                child: const Text(
+                  'Delete Database',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onPressed: () async {
+                  await _deleteDatabase(context);
+                },
+              ),
             ],
           ),
         ),

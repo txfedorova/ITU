@@ -51,6 +51,95 @@ class GalleryScreen extends StatelessWidget {
   }
 }
 
+
+class CommentsWidget extends StatelessWidget {
+  final int filmId;
+
+  const CommentsWidget({Key? key, required this.filmId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50, // Adjust the height as needed
+      child: TextButton(
+        onPressed: () {
+          // Open the comments screen for the selected film
+          context.push('/listFilms/$filmId/comments');
+        },
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.comment),
+            SizedBox(width: 8),
+            Text('View Comments'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FilmAttribute extends StatelessWidget {
+  final String attribName;
+  final String attribValue;
+
+  const FilmAttribute({Key? key, required this.attribName, required this.attribValue}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: attribName,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 18,
+            ),
+          ),
+          TextSpan(
+            text: attribValue,
+            style: const TextStyle(
+              fontWeight: FontWeight.normal,
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilmPoster extends StatelessWidget {
+  final String posterPath;
+
+  const FilmPoster({Key? key, required this.posterPath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return (
+      posterPath != "<No poster>"
+      ? Container(
+          height: 500,
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(20),
+            image: DecorationImage(
+              image: Image.file(File(posterPath)).image,
+              fit: BoxFit.fill,
+            ),
+          ),
+        )
+      : const SizedBox(
+          height: 200,
+          child: Text("<No poster>"),
+        )
+    );
+  }
+}
+
 class FilmSwiper extends StatefulWidget {
   final List<Film> films;
   final int userId;
@@ -145,34 +234,13 @@ class _FilmSwiperState extends State<FilmSwiper> {
                                 height: 600,
                                 width: 350,
                                 child: SingleChildScrollView(
-                                  // child: Container(
-                                  //   color: Colors.orangeAccent[100],
-                                  //   padding: const EdgeInsets.all(20),
                                   child: Column(
                                     // mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      currentFilm.posterPath != "<No poster>"
-                                          ? Container(
-                                              height: 500,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                image: DecorationImage(
-                                                  image: Image.file(File(
-                                                          currentFilm
-                                                              .posterPath))
-                                                      .image,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox(
-                                              height: 200,
-                                              child: Text("<No poster>"),
-                                            ),
+                                      FilmPoster(posterPath: currentFilm.posterPath),
                                       const SizedBox(height: 10),
                                       Center(
                                         child: Text(
@@ -185,120 +253,15 @@ class _FilmSwiperState extends State<FilmSwiper> {
                                         ),
                                       ),
                                       const SizedBox(height: 5),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Overview: ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: currentFilm.overview,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      FilmAttribute(attribName: "Overview: ", attribValue: currentFilm.overview),
                                       const SizedBox(height: 5),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Release date: ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: currentFilm.releaseDate,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      FilmAttribute(attribName: "Release Date: ", attribValue: currentFilm.releaseDate),
                                       const SizedBox(height: 5),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Actors: ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: currentFilm.actors,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      FilmAttribute(attribName: "Actors: ", attribValue: currentFilm.actors),
                                       const SizedBox(height: 5),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Director: ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: currentFilm.director,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      FilmAttribute(attribName: "Director: ", attribValue: currentFilm.director),
                                       const SizedBox(height: 5),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Duration: ',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: currentFilm.duration,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                      FilmAttribute(attribName: "Duration: ", attribValue: currentFilm.duration),
                                       const SizedBox(height: 10),
                                     ],
                                   ),
@@ -307,24 +270,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
                               ),
                             ),
                             Center(
-                              child: SizedBox(
-                                height: 50, // Adjust the height as needed
-                                child: TextButton(
-                                  onPressed: () {
-                                    int filmId = currentFilm.id!;
-                                    // Open the comments screen for the selected film
-                                    context.push('/listFilms/$filmId/comments');
-                                  },
-                                  child: const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.comment),
-                                      SizedBox(width: 8),
-                                      Text('View Comments'),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              child: CommentsWidget(filmId: currentFilm.id!,)
                             ),
                           ],
                         ),
@@ -332,7 +278,8 @@ class _FilmSwiperState extends State<FilmSwiper> {
                     },
                     onSwipe: (previousIndex, currentIndex, direction) {
                       debugPrint(
-                          'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
+                          'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}'
+                      );
 
                       if (previousIndex == filteredFilms.length - 1) {
                         setState(() {
@@ -370,7 +317,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
                       }
 
                       // Reset feedback message after a second
-                      Future.delayed(Duration(seconds: 1), () {
+                      Future.delayed(const Duration(seconds: 1), () {
                         setState(() {
                           feedbackMessage = '';
                         });

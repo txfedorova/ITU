@@ -204,9 +204,7 @@ class _MyHomePageState extends State<FilmQueryScreen> {
 class _QueryResultsList extends StatelessWidget {
   final _FilmQueryResults filmQueryResults;
 
-  _QueryResultsList(this.filmQueryResults, {Key? key}) : super(key: key) {
-    print("*****Query results: $filmQueryResults");
-  }
+  _QueryResultsList(this.filmQueryResults, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
