@@ -1,3 +1,6 @@
+/// Authors:
+/// Tatiana Fedorova (xfedor14@stud.fit.vutbr.cz)
+///
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:itu_app/model/db_helper.dart';
@@ -20,14 +23,12 @@ class UserController extends ChangeNotifier {
     final db = await _databaseHelper.database;
 
     await db.transaction((txn) async {
-      // Delete user_films associated with the user
       await txn.delete(
         'user_films',
         where: 'user_id = ?',
         whereArgs: [id],
       );
 
-      // Delete the user
       await txn.delete(
         'users',
         where: 'id = ?',

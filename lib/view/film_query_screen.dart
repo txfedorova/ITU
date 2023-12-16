@@ -20,7 +20,6 @@ import 'dart:io';
 
 // https://stackoverflow.com/questions/38933801/calling-an-async-method-from-a-constructor-in-dart
 class _FilmQueryResults {
-  // Key and token copied from my TMDB profile
   final String apiKey = 'c1e3556e0182098dbaff3210c89a584e';
   final String readAccessToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWUzNTU2ZTAxODIwOThkYmFmZjMyMTBjODlhNTg0ZSIsInN1YiI6IjY1NjYxYzAwODlkOTdmMDBlMTcyZmUyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Rk1-fBcVDmw5XDQ6ww7LHKkgidnmBMhPqiM6SZvZWO0';
@@ -35,23 +34,18 @@ class _FilmQueryResults {
     tmdb = TMDB(
       ApiKeys(apiKey, readAccessToken),
       logConfig: const ConfigLogger.showAll(),
-      //defaultLanguage:'en-US'
     );
   }
 
-  /// Public factory
   static Future<_FilmQueryResults> create(String movieTitle) async {
     print("create() (public factory)");
 
-    // Call the private constructor
     var fqr = _FilmQueryResults._create(movieTitle);
 
-    // Do initialization that requires async
     String query = Uri.encodeComponent(movieTitle);
     Map response =
         await fqr.tmdb.v3.search.queryMovies(query, includeAdult: true);
 
-    // Check movieTitle format (not empty, not only spaces, cannot contain only numbers)
     if (movieTitle.isEmpty || movieTitle.trim().isEmpty) {
       print('******Empty movie title');
       return fqr;
@@ -62,14 +56,12 @@ class _FilmQueryResults {
       return fqr;
     }
 
-    // Filter out null results
     List<Map<String, dynamic>> validResults = response['results']
         .where((result) => result != null)
         .cast<Map<String, dynamic>>()
         .toList();
 
 
-    // Limit the number of results
     if (validResults.length > fqr.maxResults) {
       validResults.length = fqr.maxResults;
     }
@@ -89,7 +81,6 @@ class _FilmQueryResults {
       fqd.posterPath = result['poster_path'];
       fqd.releaseDate = result['release_date'];
 
-      // Fetch year, duration, director, and actors
       await fqr.tmdb.v3.movies.getCredits(result['id']).then((credits) {
         int maxActors = 3;
         String actors = "";
@@ -103,7 +94,6 @@ class _FilmQueryResults {
           }
         }
 
-        // Remove the last ", "
         if (actors.isNotEmpty) {
           actors = actors.substring(0, actors.length - 2);
           fqd.actors = actors;
@@ -114,7 +104,6 @@ class _FilmQueryResults {
         print("Error fetching credits: $e");
       });
 
-      // Fetch details
       await fqr.tmdb.v3.movies.getDetails(result['id']).then((details) {
         fqd.duration = "${details['runtime']} min.";
       }).catchError((e) {
@@ -123,7 +112,6 @@ class _FilmQueryResults {
       fqr.films.add(fqd);
     }
 
-    // Return the fully initialized object
     return fqr;
   }
 }
@@ -139,7 +127,6 @@ class FilmQueryScreen extends StatefulWidget {
 class _MyHomePageState extends State<FilmQueryScreen> {
   TextEditingController movieTitleController = TextEditingController();
 
-  // Needs to be a class attribute for setState() to update the widget
   _FilmQueryResults? filmQueryResults;
 
   @override
@@ -183,7 +170,6 @@ class _MyHomePageState extends State<FilmQueryScreen> {
                 String movieTitle = movieTitleController.text;
                 filmQueryResults = await _FilmQueryResults.create(movieTitle);
                 setState(() {
-                  // This is needed to update the widget
                   filmQueryResults = filmQueryResults;
                 });
               },
@@ -235,15 +221,10 @@ class _QueryResult extends StatelessWidget {
     String url = "$tmdbImageBaseUrl${queriedFilm.posterPath}";
     final imageName = "${queriedFilm.title}.jpg";
 
-    // Check if the image is already downloaded
 
-    // Get the image name
-    // Get the document directory path
     final appDir = await path_provider.getApplicationDocumentsDirectory();
-    // This is the saved image path
     final localPath = path.join(appDir.path, imageName);
 
-    // Print out all image paths in documents directory
     final savedImages = appDir.listSync();
 
     int i = 0;
@@ -258,7 +239,6 @@ class _QueryResult extends StatelessWidget {
 
     final response = await http.get(Uri.parse(url));
 
-    // Download the image
     final imageFile = File(localPath);
     await imageFile.writeAsBytes(response.bodyBytes);
 
@@ -266,7 +246,6 @@ class _QueryResult extends StatelessWidget {
   }
 
   void addFilmToDatabase(FilmController controller) async {
-    // Download image from posterPath and save it locally
     String savedPosterLocalPath = await downloadPoster();
 
     Film film = queriedFilm;
@@ -281,7 +260,7 @@ class _QueryResult extends StatelessWidget {
       onTap: () => {
         print("********Tapped on ${queriedFilm.title}"),
         addFilmToDatabase(context.read<FilmController>()),
-        context.pop() // Go back to the previous screen
+        context.pop()
       },
       child: SizedBox(
         child: Column(

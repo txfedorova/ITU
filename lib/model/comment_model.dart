@@ -1,10 +1,12 @@
+/// Authors: 
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
+/// 
 class Comment {
   final int? id;
   final int filmId;
   final String text;
   final String timestamp;
 
-  // Id must be set by the database automatically when inserting a new comment.
   Comment({
     this.id,
     required this.filmId,
@@ -18,7 +20,6 @@ class Comment {
         text = map['text'] as String,
         timestamp = map['timestamp'] as String;
 
-  // When inserting a new comment, the id must not be supplied.
   Map<String, dynamic> toMap() {
     final map = {
       'film_id': filmId,
@@ -26,7 +27,6 @@ class Comment {
       'timestamp': timestamp,
     };
 
-    // In case we update an existing comment, we need to supply the id.
     if (id != null) {
       map['id'] = id!;
     }

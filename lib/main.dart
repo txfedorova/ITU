@@ -1,6 +1,6 @@
-/// Authors: 
+/// Authors:
 /// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
-/// 
+///
 
 import 'package:flutter/material.dart';
 import 'package:itu_app/controller/comment_controller.dart';

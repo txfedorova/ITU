@@ -1,3 +1,6 @@
+/// Authors: 
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
+/// 
 class UserFilms {
   final int? id;
   final int userId;

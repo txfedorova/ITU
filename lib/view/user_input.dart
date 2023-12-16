@@ -1,3 +1,6 @@
+/// Authors:
+/// Tatiana Fedorova (xfedor14@stud.fit.vutbr.cz)
+///
 import 'package:flutter/material.dart';
 import '../controller/user_controller.dart';
 
@@ -43,12 +46,11 @@ class _UserInputWidgetState extends State<UserInputWidget> {
                 margin: const EdgeInsets.all(3.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
-                      15.0), // Adjust the radius as needed
+                      15.0),
                 ),
                 child: ListTile(
                   title: Text(user['name']),
                   onTap: () {
-                    // Callback function when a user is selected
                     widget.onUserSelected(user['id']);
                   },
                   trailing: IconButton(
@@ -90,8 +92,6 @@ class _UserInputWidgetState extends State<UserInputWidget> {
               await _userController.addUser(userName);
               _nameController.clear();
               _loadUsers();
-
-              // widget.onUserAdded();
             }
           },
           child: const Text(

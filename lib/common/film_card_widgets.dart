@@ -1,3 +1,6 @@
+/// Authors:
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+///
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,10 +14,9 @@ class CommentsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50, // Adjust the height as needed
+      height: 50,
       child: TextButton(
         onPressed: () {
-          // Open the comments screen for the selected film
           context.push('/listFilms/$filmId/comments');
         },
         child: const Row(
@@ -34,7 +36,9 @@ class FilmAttribute extends StatelessWidget {
   final String attribName;
   final String attribValue;
 
-  const FilmAttribute({Key? key, required this.attribName, required this.attribValue}) : super(key: key);
+  const FilmAttribute(
+      {Key? key, required this.attribName, required this.attribValue})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +74,20 @@ class FilmPoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (
-      posterPath != "<No poster>"
-      ? Container(
-          height: 500,
-          decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(20),
-            image: DecorationImage(
-              image: Image.file(File(posterPath)).image,
-              fit: BoxFit.fill,
+    return (posterPath != "<No poster>"
+        ? Container(
+            height: 420,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: Image.file(File(posterPath)).image,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-        )
-      : const SizedBox(
-          height: 200,
-          child: Text("<No poster>"),
-        )
-    );
+          )
+        : const SizedBox(
+            height: 200,
+            child: Text("<No poster>"),
+          ));
   }
 }

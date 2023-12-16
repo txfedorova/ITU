@@ -53,12 +53,10 @@ class FilmsList extends StatelessWidget {
                 ),
               ],
             ),
-            // Wait until database returns the list of films
             FutureBuilder(
               future: films,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  // Display the list of films
                   return Expanded(
                     child: ListView.separated(
                       itemBuilder: (_, index) =>
@@ -114,7 +112,6 @@ class _ListEntryDeleteButton extends StatelessWidget {
   void deleteFilmFromDatabase(FilmController controller) {
     controller.deleteFilm(film.id!);
 
-    // Delete the image from the device
     var file = File(film.posterPath);
     file.delete();
   }

@@ -1,5 +1,5 @@
 /// Authors: 
-/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
 /// 
 import 'package:flutter/material.dart';
 import 'package:itu_app/model/db_helper.dart';
@@ -49,18 +49,16 @@ class UserFilmsController extends ChangeNotifier {
   Future<void> addUserFilm(int userId, int filmId, bool liked) async {
     final db = await _databaseHelper.database;
 
-    // Check if the user already has this film
     final existingUserFilm = await db.query('user_films',
         where: 'user_id = ? AND film_id = ?', whereArgs: [userId, filmId]);
 
     if (existingUserFilm.isEmpty) {
-      // If the film is not already in user films, insert it
       await db.insert(
         'user_films',
         UserFilms(
           userId: userId,
           filmId: filmId,
-          choice: liked ? 1 : 0, // 1 for like, 0 for dislike
+          choice: liked ? 1 : 0,
         ).toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );

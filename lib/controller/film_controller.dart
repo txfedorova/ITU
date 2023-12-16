@@ -11,7 +11,7 @@ import 'package:itu_app/model/db_helper.dart';
 class FilmController extends ChangeNotifier {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
   
-  Future<void> insertFilm(Film film) async { //Film film
+  Future<void> insertFilm(Film film) async {
     final db = await _databaseHelper.database;
     await db.insert('films', 
       film.toMap(),
@@ -70,6 +70,3 @@ class FilmController extends ChangeNotifier {
     });
   }
 }
-
-//https://docs.flutter.dev/data-and-backend/serialization/json
-//https://levelup.gitconnected.com/crud-with-sqlite-df9254d917d0

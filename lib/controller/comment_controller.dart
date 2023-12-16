@@ -1,7 +1,10 @@
+/// Authors: 
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
+/// 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:itu_app/model/comment_model.dart'; // assuming you have a Comment model
+import 'package:itu_app/model/comment_model.dart';
 import 'package:itu_app/model/db_helper.dart';
 
 class CommentController extends ChangeNotifier {

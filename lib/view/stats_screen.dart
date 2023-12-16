@@ -1,3 +1,6 @@
+/// Authors: 
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
+/// 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -46,7 +49,7 @@ class StatsScreen extends StatelessWidget {
 class BestMatchCard extends StatelessWidget {
   double _percentageLikes = 0.0;
 
-  BestMatchCard({super.key}); // Local variable to store the percentage
+  BestMatchCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +78,10 @@ class BestMatchCard extends StatelessWidget {
             InkWell(
               onTap: () {
                 int filmId = bestMatchFilm.id!;
-                // Open the comments screen for the selected film
                 context.push('/listFilms/$filmId/comments');
               },
               child: SizedBox(
-                height: 570,
+                height: 520,
                 width: 300,
                 child: SingleChildScrollView(
                   child: Column(
@@ -98,15 +100,25 @@ class BestMatchCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      FilmAttribute(attribName: "Overview: ", attribValue: bestMatchFilm.overview),
+                      FilmAttribute(
+                          attribName: "Overview: ",
+                          attribValue: bestMatchFilm.overview),
                       const SizedBox(height: 5),
-                      FilmAttribute(attribName: "Release Date: ", attribValue: bestMatchFilm.releaseDate),
+                      FilmAttribute(
+                          attribName: "Release Date: ",
+                          attribValue: bestMatchFilm.releaseDate),
                       const SizedBox(height: 5),
-                      FilmAttribute(attribName: "Actors: ", attribValue: bestMatchFilm.actors),
+                      FilmAttribute(
+                          attribName: "Actors: ",
+                          attribValue: bestMatchFilm.actors),
                       const SizedBox(height: 5),
-                      FilmAttribute(attribName: "Director: ", attribValue: bestMatchFilm.director),
+                      FilmAttribute(
+                          attribName: "Director: ",
+                          attribValue: bestMatchFilm.director),
                       const SizedBox(height: 5),
-                      FilmAttribute(attribName: "Duration: ", attribValue: bestMatchFilm.duration),
+                      FilmAttribute(
+                          attribName: "Duration: ",
+                          attribValue: bestMatchFilm.duration),
                       const SizedBox(height: 10),
                       CommentsWidget(filmId: bestMatchFilm.id!),
                     ],
@@ -114,7 +126,6 @@ class BestMatchCard extends StatelessWidget {
                 ),
               ),
             ),
-          
           ],
         );
       },
@@ -125,9 +136,8 @@ class BestMatchCard extends StatelessWidget {
     final db = await context.read<DatabaseHelper>().database;
     final films = await context.read<FilmController>().films();
     final users =
-        await context.read<UserController>().getUsers(); // Await users
+        await context.read<UserController>().getUsers();
 
-    // Calculate the percentage of likes for each film
     final percentageLikes = <int, double>{};
 
     for (final film in films) {
@@ -149,17 +159,13 @@ class BestMatchCard extends StatelessWidget {
       percentageLikes[film.id!] = percentage;
     }
 
-    // Find the film with the highest percentage of likes
     final bestMatchFilmId =
         percentageLikes.entries.reduce((a, b) => a.value > b.value ? a : b).key;
 
-    // Retrieve the best match film or return null if no match
     final bestMatchFilm = films.firstWhere(
       (film) => film.id == bestMatchFilmId,
-      //orElse: () => null,
     );
 
-    // Store the percentage of likes in the local variable
     _percentageLikes = percentageLikes[bestMatchFilmId] ?? 0.0;
 
     return bestMatchFilm;

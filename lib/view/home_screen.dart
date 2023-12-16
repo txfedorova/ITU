@@ -1,10 +1,10 @@
 /// Authors: 
-/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// Tatiana Fedorova (xfedor14@stud.fit.vutbr.cz)
 /// 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:itu_app/view/user_input.dart';
-import 'package:itu_app/model/db_helper.dart'; // Import the DatabaseHelper
+import 'package:itu_app/model/db_helper.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,17 +25,11 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // User input section with scrolling
               Expanded(
                 child: ListView(
                   children: [
                     UserInputWidget(
-                      // onUserAdded: () {
-                      //   // Callback function to navigate to film gallery screen
-                      //   context.push('/filmGallery');
-                      // },
                       onUserSelected: (userId) {
-                        // Callback function to navigate to film gallery with selected user's ID
                         context.push('/filmGallery/$userId');
                       },
                     ),
@@ -54,7 +48,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Buttons at the bottom
               ElevatedButton(
                 child: const Text(
                   'List of films',
@@ -65,7 +58,6 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
-              // Button to delete the database
               ElevatedButton(
                 child: const Text(
                   'Delete Database',
@@ -82,7 +74,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Function to delete the database
   Future<void> _deleteDatabase(BuildContext context) async {
     try {
       final dbHelper = DatabaseHelper();

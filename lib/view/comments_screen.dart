@@ -1,6 +1,5 @@
 /// Authors: 
-/// Alexandr
-/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// Aleksandr Shevchenko (xshevc01@stud.fit.vutbr.cz)
 /// 
 import 'package:flutter/material.dart';
 
@@ -72,7 +71,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   icon: const Icon(Icons.send),
                   onPressed: () {
                     var commentController = context.read<CommentController>();
-                    // Add the new comment
                     commentController.insertComment(
                       Comment(
                         filmId: widget.filmIndex,
@@ -80,7 +78,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         timestamp: DateTime.now().toString(),
                       ),
                     );
-                    // Clear the text field after adding the comment
                     _commentTextController.clear();
                   },
                 ),
@@ -94,7 +91,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   void dispose() {
-    //_commentController.dispose();
     _commentTextController.dispose();
     super.dispose();
   }

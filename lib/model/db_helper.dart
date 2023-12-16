@@ -1,6 +1,6 @@
-/// Authors: 
+/// Authors:
 /// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
-/// 
+///
 
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -80,7 +80,7 @@ class DatabaseHelper extends ChangeNotifier {
   Future<void> clearDatabase() async {
     try {
       final databaseFile = join(await getDatabasesPath(),
-          _databaseName); // Replace with your database file name
+          _databaseName);
 
       await deleteDatabase(databaseFile);
       print('DATABASE DELETED\n\n\n');
@@ -88,52 +88,4 @@ class DatabaseHelper extends ChangeNotifier {
       print('ERROR DELETING DATABASE: $e\n\n\n');
     }
   }
-
-  // Future<void> insertUser(String name) async {
-  //   final db = await database;
-  //   await db.insert(
-  //     'users',
-  //     {'name': name},
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  //   print('USER ADDED\n\n\n');
-  // }
-
-  // Future<void> deleteUser(int id) async {
-  //   final db = await database;
-
-  //   await db.transaction((txn) async {
-  //     // Delete user_films associated with the user
-  //     await txn.delete(
-  //       'user_films',
-  //       where: 'user_id = ?',
-  //       whereArgs: [id],
-  //     );
-
-  //     // Delete the user
-  //     await txn.delete(
-  //       'users',
-  //       where: 'id = ?',
-  //       whereArgs: [id],
-  //     );
-  //   });
-
-  //   print('USER DELETED\n\n\n');
-  // }
-
-  // Future<List<Map<String, dynamic>>> getUsers() async {
-  //   final db = await database;
-  //   return await db.query('users');
-  // }
-
-  // Future<String> getUserName(int id) async {
-  //   final db = await database;
-  //   final user = await db.query(
-  //     'users',
-  //     where: 'id = ?',
-  //     whereArgs: [id],
-  //   );
-  //   print('USER NAME: ${user[0]['name']}\n\n\n');
-  //   return user[0]['name'].toString();
-  // }
 }
