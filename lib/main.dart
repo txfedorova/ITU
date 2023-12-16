@@ -97,11 +97,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color(0xFF59B773),
-          secondary: const Color(0xFF59B773),
+          primary: const Color.fromARGB(255, 68, 70, 115),
+          secondary: const Color.fromARGB(255, 68, 70, 115),
         ),
-        scaffoldBackgroundColor: const Color(0xFFF6FAF1),
-        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.black)),
+        scaffoldBackgroundColor: Color.fromARGB(255, 197, 202, 224),
+        textTheme: const TextTheme(
+            bodyMedium: TextStyle(
+          color: Colors.black,
+        )),
       ),
     );
   }

@@ -1,5 +1,9 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:itu_app/controller/film_controller.dart';
 import 'package:itu_app/controller/user_controller.dart';
 import 'package:itu_app/model/db_helper.dart';
@@ -17,30 +21,30 @@ class StatsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Statistics'),
       ),
-      body: ListView(
-        // Wrap with ListView
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'The best match is:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 20),
-                BestMatchCard(),
-              ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              'The best match is:',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Expanded(
+              child: BestMatchCard(),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class BestMatchCard extends StatelessWidget {
+  double _percentageLikes = 0.0; // Local variable to store the percentage
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Film?>(
@@ -55,31 +59,181 @@ class BestMatchCard extends StatelessWidget {
         }
 
         final bestMatchFilm = snapshot.data!;
-        // Additional logic here...
 
-        return bestMatchFilm != null
-            ? Card(
-                elevation: 4,
-                margin: const EdgeInsets.all(16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 5),
+            Text(
+              'Percentage of Likes: ${_percentageLikes.toStringAsFixed(2)}%',
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                int filmId = bestMatchFilm.id!;
+                // Open the comments screen for the selected film
+                context.push('/listFilms/$filmId/comments');
+              },
+              child: Container(
+                height: 490, // Adjust the height as needed
+                width: 300, // Adjust the width as needed
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        bestMatchFilm.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      bestMatchFilm.posterPath != "<No poster>"
+                          ? Container(
+                              height: 400, // Adjust the height as needed
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                  image: Image.file(
+                                    File(bestMatchFilm.posterPath),
+                                  ).image,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 200, // Adjust the height as needed
+                              child: const Center(
+                                child: Text("<No poster>"),
+                              ),
+                            ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: Text(
+                          bestMatchFilm.title,
+                          style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Overview: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextSpan(
+                              text: bestMatchFilm.overview,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Release date: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextSpan(
+                              text: bestMatchFilm.releaseDate,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Actors: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextSpan(
+                              text: bestMatchFilm.actors,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Director: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextSpan(
+                              text: bestMatchFilm.director,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Duration: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            TextSpan(
+                              text: bestMatchFilm.duration,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
-                      // Add more details as needed (overview, release date, etc.)
                     ],
                   ),
                 ),
-              )
-            : Text('No films with likes found.');
+              ),
+            ),
+          ],
+        );
       },
     );
   }
@@ -117,9 +271,13 @@ class BestMatchCard extends StatelessWidget {
         percentageLikes.entries.reduce((a, b) => a.value > b.value ? a : b).key;
 
     // Retrieve the best match film or return null if no match
-    final bestMatchFilm = films.firstWhere((film) => film.id == bestMatchFilmId
-        //orElse: () => null,
-        );
+    final bestMatchFilm = films.firstWhere(
+      (film) => film.id == bestMatchFilmId,
+      //orElse: () => null,
+    );
+
+    // Store the percentage of likes in the local variable
+    _percentageLikes = percentageLikes[bestMatchFilmId] ?? 0.0;
 
     return bestMatchFilm;
   }

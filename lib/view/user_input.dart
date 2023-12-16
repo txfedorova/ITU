@@ -67,7 +67,7 @@ class _UserInputWidgetState extends State<UserInputWidget> {
             controller: _nameController,
             decoration: const InputDecoration(
               hintText: 'User Name',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.black),
               ),
