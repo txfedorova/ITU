@@ -1,3 +1,6 @@
+/// Authors: 
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
 import 'package:flutter/material.dart';
 import 'package:itu_app/model/db_helper.dart';
 import 'package:itu_app/model/user_films_model.dart';

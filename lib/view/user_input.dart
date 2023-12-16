@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import '../controller/user_controller.dart';
 
 class UserInputWidget extends StatefulWidget {
-  // final VoidCallback onUserAdded;
   final void Function(int userId) onUserSelected;
 
   const UserInputWidget({
     Key? key,
-    // required this.onUserAdded,
     required this.onUserSelected,
   }) : super(key: key);
 

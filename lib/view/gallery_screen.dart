@@ -1,3 +1,6 @@
+/// Authors: 
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:itu_app/controller/user_controller.dart';

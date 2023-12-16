@@ -1,3 +1,7 @@
+/// Authors: 
+/// Alexandr
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -15,20 +19,12 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  //final CommentController _commentController = CommentController();
   final TextEditingController _commentTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var filmComments =
         context.watch<CommentController>().comments(widget.filmIndex);
-
-    print("\n\nBUILDING LIST COMMENTS\n\n");
-    // comments.then((comments) {
-    // 	for (var comment in comments) {
-    // 	  print(comment.text);
-    // 	}
-    // });
 
     return Scaffold(
       appBar: AppBar(

@@ -1,4 +1,6 @@
-
+/// Authors: 
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
 class Film {
   // The id is set by the database automatically when inserting a new film.
   final int? id;

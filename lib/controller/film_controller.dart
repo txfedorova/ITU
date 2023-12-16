@@ -1,3 +1,7 @@
+/// Authors: 
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,18 +12,6 @@ class FilmController extends ChangeNotifier {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
   
   Future<void> insertFilm(Film film) async { //Film film
-    // final db = await _databaseHelper.database;
-    // final List<Map<String, dynamic>> maps = await db.query('films', where: 'title = ?', whereArgs: [film.title]);
-    // // Check if film with such title and release date already exists
-    // for (var map in maps) {
-    //   if (map['title'] == film.title && map['releaseDate'] == film.releaseDate) {
-    //     print('********Film with such title and release date already exists');
-    //     return;
-    //   }
-    // }
-
-
-
     final db = await _databaseHelper.database;
     await db.insert('films', 
       film.toMap(),

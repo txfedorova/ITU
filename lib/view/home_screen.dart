@@ -1,3 +1,6 @@
+/// Authors: 
+/// Vadim Goncearenco (xgonce00@stud.fit.vutbr.cz)
+/// 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:itu_app/view/user_input.dart';
