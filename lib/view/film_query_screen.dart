@@ -155,36 +155,39 @@ class _MyHomePageState extends State<FilmQueryScreen> {
         foregroundColor: Colors.white,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextField(
-              controller: movieTitleController,
-              decoration: const InputDecoration(
-                labelText: 'Enter movie title',
+        child: Container(
+          padding: const EdgeInsets.all(14.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextField(
+                controller: movieTitleController,
+                decoration: const InputDecoration(
+                  labelText: 'Enter movie title',
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                String movieTitle = movieTitleController.text;
-                filmQueryResults = await _FilmQueryResults.create(movieTitle);
-                setState(() {
-                  filmQueryResults = filmQueryResults;
-                });
-              },
-              child: const Text('Search'),
-            ),
-            (() {
-              if (filmQueryResults == null) {
-                return const SizedBox.shrink();
-              } else if (filmQueryResults!.films.isEmpty) {
-                return const Text("No films found with such parameters :(");
-              } else {
-                return _QueryResultsList(filmQueryResults!);
-              }
-            })()
-          ],
+              ElevatedButton(
+                onPressed: () async {
+                  String movieTitle = movieTitleController.text;
+                  filmQueryResults = await _FilmQueryResults.create(movieTitle);
+                  setState(() {
+                    filmQueryResults = filmQueryResults;
+                  });
+                },
+                child: const Text('Search'),
+              ),
+              (() {
+                if (filmQueryResults == null) {
+                  return const SizedBox.shrink();
+                } else if (filmQueryResults!.films.isEmpty) {
+                  return const Text("No films found with such parameters :(");
+                } else {
+                  return _QueryResultsList(filmQueryResults!);
+                }
+              })()
+            ],
+          ),
         ),
       ),
     );
