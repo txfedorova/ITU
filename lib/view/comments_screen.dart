@@ -20,18 +20,21 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var filmComments = context.watch<CommentController>().comments(widget.filmIndex);
+    var filmComments =
+        context.watch<CommentController>().comments(widget.filmIndex);
 
     print("\n\nBUILDING LIST COMMENTS\n\n");
-		// comments.then((comments) {
-		// 	for (var comment in comments) {
-		// 	  print(comment.text);
-		// 	}
-		// });
+    // comments.then((comments) {
+    // 	for (var comment in comments) {
+    // 	  print(comment.text);
+    // 	}
+    // });
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Comments'),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
       ),
       body: Column(
         children: [
@@ -65,7 +68,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 Expanded(
                   child: TextField(
                     controller: _commentTextController,
-                    decoration: const InputDecoration(hintText: 'Add a comment'),
+                    decoration:
+                        const InputDecoration(hintText: 'Add a comment'),
                   ),
                 ),
                 IconButton(

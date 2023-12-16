@@ -77,8 +77,8 @@ class BestMatchCard extends StatelessWidget {
                 context.push('/listFilms/$filmId/comments');
               },
               child: SizedBox(
-                height: 490, // Adjust the height as needed
-                width: 300, // Adjust the width as needed
+                height: 490,
+                width: 300,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +102,7 @@ class BestMatchCard extends StatelessWidget {
                                 child: Text("<No poster>"),
                               ),
                             ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       Center(
                         child: Text(
                           bestMatchFilm.title,
