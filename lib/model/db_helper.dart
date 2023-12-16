@@ -31,8 +31,7 @@ class DatabaseHelper extends ChangeNotifier {
   Future<void> _onCreate(Database db, int version) async {
     print('CREATING DATABASE\n\n\n\n\n\n\n');
 
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE films (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT NOT NULL,
@@ -46,8 +45,7 @@ class DatabaseHelper extends ChangeNotifier {
       )
     ''');
 
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         film_id INTEGER NOT NULL,
@@ -56,16 +54,14 @@ class DatabaseHelper extends ChangeNotifier {
         FOREIGN KEY (film_id) REFERENCES films (id)
       )''');
 
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE users (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT NOT NULL
       )
     ''');
 
-    await db.execute(
-        '''
+    await db.execute('''
       CREATE TABLE user_films (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         user_id INTEGER NOT NULL,
@@ -89,40 +85,51 @@ class DatabaseHelper extends ChangeNotifier {
     }
   }
 
-  Future<void> insertUser(String name) async {
-    final db = await database;
-    await db.insert(
-      'users',
-      {'name': name},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    print('USER ADDED\n\n\n');
-  }
+  // Future<void> insertUser(String name) async {
+  //   final db = await database;
+  //   await db.insert(
+  //     'users',
+  //     {'name': name},
+  //     conflictAlgorithm: ConflictAlgorithm.replace,
+  //   );
+  //   print('USER ADDED\n\n\n');
+  // }
 
-  Future<void> deleteUser(int id) async {
-    final db = await database;
+  // Future<void> deleteUser(int id) async {
+  //   final db = await database;
 
-    await db.transaction((txn) async {
-      // Delete user_films associated with the user
-      await txn.delete(
-        'user_films',
-        where: 'user_id = ?',
-        whereArgs: [id],
-      );
+  //   await db.transaction((txn) async {
+  //     // Delete user_films associated with the user
+  //     await txn.delete(
+  //       'user_films',
+  //       where: 'user_id = ?',
+  //       whereArgs: [id],
+  //     );
 
-      // Delete the user
-      await txn.delete(
-        'users',
-        where: 'id = ?',
-        whereArgs: [id],
-      );
-    });
+  //     // Delete the user
+  //     await txn.delete(
+  //       'users',
+  //       where: 'id = ?',
+  //       whereArgs: [id],
+  //     );
+  //   });
 
-    print('USER DELETED\n\n\n');
-  }
+  //   print('USER DELETED\n\n\n');
+  // }
 
-  Future<List<Map<String, dynamic>>> getUsers() async {
-    final db = await database;
-    return await db.query('users');
-  }
+  // Future<List<Map<String, dynamic>>> getUsers() async {
+  //   final db = await database;
+  //   return await db.query('users');
+  // }
+
+  // Future<String> getUserName(int id) async {
+  //   final db = await database;
+  //   final user = await db.query(
+  //     'users',
+  //     where: 'id = ?',
+  //     whereArgs: [id],
+  //   );
+  //   print('USER NAME: ${user[0]['name']}\n\n\n');
+  //   return user[0]['name'].toString();
+  // }
 }

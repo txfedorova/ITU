@@ -64,8 +64,6 @@ class _FilmQueryResults {
         .cast<Map<String, dynamic>>()
         .toList();
 
-    // Case-insensitive comparison
-    String lowerCaseTitle = movieTitle.toLowerCase();
 
     // Limit the number of results
     if (validResults.length > fqr.maxResults) {

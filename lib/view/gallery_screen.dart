@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:itu_app/controller/user_controller.dart';
 import 'package:itu_app/controller/user_films_controller.dart';
 import 'package:itu_app/model/user_films_model.dart';
 import 'package:provider/provider.dart';
@@ -66,23 +67,34 @@ class _FilmSwiperState extends State<FilmSwiper> {
   int currentIndex = 0;
   bool isRoundCompleted = false;
   List<int> viewedFilmIds = [];
+  String feedbackMessage = '';
+  Color feedbackColor = Colors.black;
+  String name = '';
 
   @override
   void initState() {
     super.initState();
     // Fetch the list of films that the user has already viewed
     fetchViewedFilms();
+    fetchUserName();
   }
 
   Future<void> fetchViewedFilms() async {
-    List<UserFilms> viewedFilms = await Provider.of<UserFilmsController>(
-            context,
-            listen: false)
-        .userFilms(widget
-            .userId); // Assuming the user ID is 1, replace it with the actual user ID
+    List<UserFilms> viewedFilms =
+        await Provider.of<UserFilmsController>(context, listen: false)
+            .userFilms(widget.userId);
     setState(() {
       viewedFilmIds = viewedFilms.map((film) => film.filmId).toList();
     });
+  }
+
+  Future<void> fetchUserName() async {
+    String userName = await Provider.of<UserController>(
+      context,
+      listen: false,
+    ).getUserName(widget.userId);
+
+    name = userName;
   }
 
   @override
@@ -91,247 +103,350 @@ class _FilmSwiperState extends State<FilmSwiper> {
     List<Film> filteredFilms =
         widget.films.where((film) => !viewedFilmIds.contains(film.id)).toList();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      alignment: Alignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (!isRoundCompleted && filteredFilms.isNotEmpty)
-          Center(
-            child: SizedBox(
-              height: 550,
-              width: 350,
-              child: CardSwiper(
-                controller: cardSwiperController,
-                cardsCount: filteredFilms.length,
-                cardBuilder: (BuildContext context, int index, __, ___) {
-                  Film currentFilm = filteredFilms[index];
+          Column(
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                '$name\'s turn!',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: SizedBox(
+                  height: 700,
+                  width: 350,
+                  child: CardSwiper(
+                    controller: cardSwiperController,
+                    cardsCount: filteredFilms.length,
+                    cardBuilder: (BuildContext context, int index, __, ___) {
+                      Film currentFilm = filteredFilms[index];
 
-                  return InkWell(
-                    onTap: () {
-                      int filmId = currentFilm.id!;
-                      // Open the comments screen for the selected film
-                      context.push('/listFilms/$filmId/comments');
-                    },
-                    child: SizedBox(
-                      height: 550,
-                      width: 350,
-                      child: SingleChildScrollView(
-                        // child: Container(
-                        //   color: Colors.orangeAccent[100],
-                        //   padding: const EdgeInsets.all(20),
+                      return InkWell(
+                        onTap: () {
+                          int filmId = currentFilm.id!;
+                          // Open the comments screen for the selected film
+                          context.push('/listFilms/$filmId/comments');
+                        },
                         child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            currentFilm.posterPath != "<No poster>"
-                                ? Container(
-                                    height: 400,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                        image: Image.file(
-                                                File(currentFilm.posterPath))
-                                            .image,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 200,
-                                    child: Text("<No poster>"),
-                                  ),
-                            const SizedBox(height: 10),
                             Center(
-                              child: Text(
-                                currentFilm.title,
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
+                              child: SizedBox(
+                                height: 600,
+                                width: 350,
+                                child: SingleChildScrollView(
+                                  // child: Container(
+                                  //   color: Colors.orangeAccent[100],
+                                  //   padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    // mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      currentFilm.posterPath != "<No poster>"
+                                          ? Container(
+                                              height: 500,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                image: DecorationImage(
+                                                  image: Image.file(File(
+                                                          currentFilm
+                                                              .posterPath))
+                                                      .image,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(
+                                              height: 200,
+                                              child: Text("<No poster>"),
+                                            ),
+                                      const SizedBox(height: 10),
+                                      Center(
+                                        child: Text(
+                                          currentFilm.title,
+                                          style: const TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Overview: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: currentFilm.overview,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Release date: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: currentFilm.releaseDate,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Actors: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: currentFilm.actors,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Director: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: currentFilm.director,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(
+                                              text: 'Duration: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: currentFilm.duration,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                  // ),
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Overview: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
+                            Center(
+                              child: SizedBox(
+                                height: 50, // Adjust the height as needed
+                                child: TextButton(
+                                  onPressed: () {
+                                    int filmId = currentFilm.id!;
+                                    // Open the comments screen for the selected film
+                                    context.push('/listFilms/$filmId/comments');
+                                  },
+                                  child: const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.comment),
+                                      SizedBox(width: 8),
+                                      Text('View Comments'),
+                                    ],
                                   ),
-                                  TextSpan(
-                                    text: currentFilm.overview,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Release date: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: currentFilm.releaseDate,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Actors: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: currentFilm.actors,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Director: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: currentFilm.director,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Duration: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: currentFilm.duration,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
                           ],
                         ),
-                        // ),
-                      ),
-                    ),
-                  );
-                },
-                onSwipe: (previousIndex, currentIndex, direction) {
-                  debugPrint(
-                      'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
+                      );
+                    },
+                    onSwipe: (previousIndex, currentIndex, direction) {
+                      debugPrint(
+                          'Card swiped from $previousIndex to $currentIndex in direction ${direction.name}');
 
-                  if (previousIndex == filteredFilms.length - 1) {
-                    setState(() {
-                      isRoundCompleted = true;
-                    });
+                      if (previousIndex == filteredFilms.length - 1) {
+                        setState(() {
+                          isRoundCompleted = true;
+                        });
 
-                    // Additional logic or message when the round is completed
-                    print('Round completed!');
+                        // Additional logic or message when the round is completed
+                        print('Round completed!');
 
-                    // You can add additional UI or show a button to restart
-                  }
+                        // You can add additional UI or show a button to restart
+                      }
 
-                  // Handle the swipe direction
-                  if (direction.name == 'right') {
-                    // Swiped right (liked), add the film to user's likes
-                    Provider.of<UserFilmsController>(context, listen: false)
-                        .addUserFilm(widget.userId,
-                            filteredFilms[previousIndex].id!, true);
-                  } else if (direction.name == 'left') {
-                    // Swiped left (disliked), add the film to user's dislikes
-                    Provider.of<UserFilmsController>(context, listen: false)
-                        .addUserFilm(widget.userId,
-                            filteredFilms[previousIndex].id!, false);
-                  }
+                      // Handle the swipe direction
+                      if (direction.name == 'right' ||
+                          direction.name == 'top') {
+                        // Swiped right (liked), add the film to user's likes
+                        Provider.of<UserFilmsController>(context, listen: false)
+                            .addUserFilm(widget.userId,
+                                filteredFilms[previousIndex].id!, true);
+                        setState(() {
+                          feedbackMessage = 'Liked!';
+                          feedbackColor =
+                              const Color.fromARGB(255, 46, 125, 48);
+                        });
+                      } else if (direction.name == 'left' ||
+                          direction.name == 'bottom') {
+                        // Swiped left (disliked), add the film to user's dislikes
+                        Provider.of<UserFilmsController>(context, listen: false)
+                            .addUserFilm(widget.userId,
+                                filteredFilms[previousIndex].id!, false);
+                        setState(() {
+                          feedbackMessage = 'Disliked!';
+                          feedbackColor = Colors.red;
+                        });
+                      }
 
-                  return true;
-                },
-                numberOfCardsDisplayed: 1,
-                backCardOffset:
-                    const Offset(-1000, 0), // Set a large negative offset
+                      // Reset feedback message after a second
+                      Future.delayed(Duration(seconds: 1), () {
+                        setState(() {
+                          feedbackMessage = '';
+                        });
+                      });
+
+                      return true;
+                    },
+                    numberOfCardsDisplayed: 1,
+                    backCardOffset:
+                        const Offset(-1000, 0), // Set a large negative offset
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         if (isRoundCompleted || filteredFilms.isEmpty)
-          Center(
-            child: SizedBox(
-              width: 150, // Adjust the width as needed
-              height: 60, // Adjust the height as needed
-              child: ElevatedButton(
-                onPressed: () {
-                  // Delete all rows in user_films for the user
-                  Provider.of<UserFilmsController>(context, listen: false)
-                      .deleteAllUserFilms(widget.userId);
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: SizedBox(
+                  width: 180,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Delete all rows in user_films for the user
+                      Provider.of<UserFilmsController>(context, listen: false)
+                          .deleteAllUserFilms(widget.userId);
 
-                  // Reset viewedFilmIds
-                  setState(() {
-                    viewedFilmIds = [];
-                    isRoundCompleted = false;
-                  });
-                },
-                child: const Text('Swipe Again'),
+                      // Reset viewedFilmIds
+                      setState(() {
+                        viewedFilmIds = [];
+                        isRoundCompleted = false;
+                      });
+                    },
+                    child: const Text(
+                      'Swipe Again',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: SizedBox(
+                  width: 180,
+                  height: 60,
+                  child: ElevatedButton(
+                    child: const Text(
+                      'View results',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
+                      context.push('/statsScreen');
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        Positioned(
+          bottom: 16,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              feedbackMessage,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: feedbackColor,
               ),
             ),
           ),
+        ),
       ],
     );
   }

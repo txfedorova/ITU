@@ -53,9 +53,9 @@ class BestMatchCard extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (!snapshot.hasData || snapshot.data == null) {
+        } else if (snapshot.hasError ||
+            !snapshot.hasData ||
+            snapshot.data == null) {
           return const Text('No user films available.');
         }
 
@@ -77,7 +77,7 @@ class BestMatchCard extends StatelessWidget {
                 context.push('/listFilms/$filmId/comments');
               },
               child: SizedBox(
-                height: 490,
+                height: 570,
                 width: 300,
                 child: SingleChildScrollView(
                   child: Column(
@@ -85,7 +85,7 @@ class BestMatchCard extends StatelessWidget {
                     children: [
                       bestMatchFilm.posterPath != "<No poster>"
                           ? Container(
-                              height: 400, // Adjust the height as needed
+                              height: 470, // Adjust the height as needed
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 image: DecorationImage(
@@ -229,6 +229,26 @@ class BestMatchCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                height: 50, // Adjust the height as needed
+                child: TextButton(
+                  onPressed: () {
+                    int filmId = bestMatchFilm.id!;
+                    // Open the comments screen for the selected film
+                    context.push('/listFilms/$filmId/comments');
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.comment),
+                      SizedBox(width: 8),
+                      Text('View Comments'),
                     ],
                   ),
                 ),

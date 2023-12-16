@@ -41,26 +41,37 @@ class HomeScreen extends StatelessWidget {
               ),
 
               ElevatedButton(
-                child: const Text('View results'),
+                child: const Text(
+                  'View results',
+                  style: TextStyle(fontSize: 25),
+                ),
                 onPressed: () {
                   context.push('/statsScreen');
                 },
               ),
-              // Button to delete the database
-              ElevatedButton(
-                child: const Text('Delete Database'),
-                onPressed: () async {
-                  await _deleteDatabase(context);
-                },
-              ),
+              const SizedBox(height: 20),
 
               // Buttons at the bottom
               ElevatedButton(
-                child: const Text('List films'),
+                child: const Text(
+                  'List of films',
+                  style: TextStyle(fontSize: 25),
+                ),
                 onPressed: () {
                   context.push('/listFilms');
                 },
               ),
+              const SizedBox(height: 20),
+              // Button to delete the database
+              // ElevatedButton(
+              //   child: const Text(
+              //     'Delete Database',
+              //     style: TextStyle(fontSize: 20),
+              //   ),
+              //   onPressed: () async {
+              //     await _deleteDatabase(context);
+              //   },
+              // ),
             ],
           ),
         ),
