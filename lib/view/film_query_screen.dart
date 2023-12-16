@@ -114,12 +114,7 @@ class _FilmQueryResults {
 
       // Fetch details
       await fqr.tmdb.v3.movies.getDetails(result['id']).then((details) {
-        if (details != null) {
-          fqd.duration = "${details['runtime']} min.";
-        } else {
-          fqd.duration =
-              "N/A"; // Handle the case where details are not available
-        }
+        fqd.duration = "${details['runtime']} min.";
       }).catchError((e) {
         print("Error fetching details: $e");
       });
@@ -164,9 +159,11 @@ class _MyHomePageState extends State<FilmQueryScreen> {
             ),
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: const Text('Film Query'))
+                child: const Text('Film Database'))
           ],
         ),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
@@ -235,7 +232,7 @@ class _QueryResult extends StatelessWidget {
   const _QueryResult(this.queriedFilm, {Key? key}) : super(key: key);
 
   Future<String> downloadPoster() async {
-    String url = "${tmdbImageBaseUrl}${queriedFilm.posterPath}";
+    String url = "$tmdbImageBaseUrl${queriedFilm.posterPath}";
     final imageName = "${queriedFilm.title}.jpg";
 
     // Check if the image is already downloaded

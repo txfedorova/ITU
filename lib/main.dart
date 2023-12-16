@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
           primary: const Color.fromARGB(255, 68, 70, 115),
           secondary: const Color.fromARGB(255, 68, 70, 115),
         ),
-        scaffoldBackgroundColor: Color.fromARGB(255, 197, 202, 224),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 197, 202, 224),
         textTheme: const TextTheme(
             bodyMedium: TextStyle(
           color: Colors.black,

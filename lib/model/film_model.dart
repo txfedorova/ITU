@@ -1,4 +1,3 @@
-import 'package:itu_app/common/utils.dart';
 
 class Film {
   // The id is set by the database automatically when inserting a new film.

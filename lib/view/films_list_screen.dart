@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as path_provider;
 import 'dart:io';
 
 import 'package:itu_app/model/film_model.dart';
@@ -14,68 +12,68 @@ class FilmsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-		var films = context.watch<FilmController>().films();
+    var films = context.watch<FilmController>().films();
 
-		print("\n\nBUILDING LIST FILMS\n\n");
-		films.then((films) {
-			for (var film in films) {
-			  print(film.title);
-			}
-		});
+    print("\n\nBUILDING LIST FILMS\n\n");
+    films.then((films) {
+      for (var film in films) {
+        print(film.title);
+      }
+    });
 
-		return Scaffold(
-			appBar: AppBar(
-			title: const Text('Films'),
-			),
-			body: Center(
-				child: Column(
-					mainAxisAlignment: MainAxisAlignment.start,
-					crossAxisAlignment: CrossAxisAlignment.center,
-					children: [
-					Row(
-						mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-						children: [
-					
-						ElevatedButton(
-							child: const Text('Add film'),
-                onPressed: () {
-                context.push('/queryScreen');
-							},
-						),
-						ElevatedButton(
-							child: const Text('Delete all films'),
-							onPressed: () {
-                var controller = context.read<FilmController>();
-                controller.clearFilms();
-							},
-						),
-					
-						],
-					),
-					// Wait until database returns the list of films
-					FutureBuilder(
-						future: films,
-						builder: (context, snapshot) {
-							if (snapshot.hasData) {
-                // Display the list of films
-                return Expanded(
-                  child: ListView.separated(
-                    itemBuilder: (_, index) =>
-                      _ListEntry(snapshot.data![index]),
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemCount: snapshot.data!.length,
-                  ),
-                );
-							} else if (snapshot.hasError) {
-							  return Text("${snapshot.error}");
-							}
-              return const CircularProgressIndicator();
-						},
-					),
-					],
-				),
-			),
-		);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Films'),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  child: const Text('Add film'),
+                  onPressed: () {
+                    context.push('/queryScreen');
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('Delete all films'),
+                  onPressed: () {
+                    var controller = context.read<FilmController>();
+                    controller.clearFilms();
+                  },
+                ),
+              ],
+            ),
+            // Wait until database returns the list of films
+            FutureBuilder(
+              future: films,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // Display the list of films
+                  return Expanded(
+                    child: ListView.separated(
+                      itemBuilder: (_, index) =>
+                          _ListEntry(snapshot.data![index]),
+                      separatorBuilder: (_, __) => const Divider(),
+                      itemCount: snapshot.data!.length,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -86,22 +84,22 @@ class _ListEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-	var textTheme = Theme.of(context).textTheme.titleLarge;
+    var textTheme = Theme.of(context).textTheme.titleLarge;
 
-	return Padding(
-	  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-	  child: LimitedBox(
-		maxHeight: 48,
-		child: Row(
-		  children: [
-			Expanded(
-			  child: Text(film.title, style: textTheme),
-			),
-			_ListEntryDeleteButton(film: film),
-		  ],
-		),
-	  ),
-	);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: LimitedBox(
+        maxHeight: 48,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(film.title, style: textTheme),
+            ),
+            _ListEntryDeleteButton(film: film),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -120,12 +118,12 @@ class _ListEntryDeleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-		return TextButton(
-			onPressed: () {
-				deleteFilmFromDatabase(context.read<FilmController>());
-			},
-			child: const Icon(Icons.recycling, semanticLabel: 'DELETE'),
-		);
+    return TextButton(
+      onPressed: () {
+        deleteFilmFromDatabase(context.read<FilmController>());
+      },
+      child: const Icon(Icons.recycling, semanticLabel: 'DELETE'),
+    );
   }
 }
 

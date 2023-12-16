@@ -12,6 +12,8 @@ class HomeScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('CineMatch'),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Container(
@@ -53,12 +55,6 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Buttons at the bottom
-              ElevatedButton(
-                child: const Text('Next User'),
-                onPressed: () {
-                  context.push('/filmGallery');
-                },
-              ),
               ElevatedButton(
                 child: const Text('List films'),
                 onPressed: () {

@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:itu_app/controller/film_controller.dart';
 import 'package:itu_app/controller/user_controller.dart';
@@ -10,7 +8,6 @@ import 'package:itu_app/model/db_helper.dart';
 import 'package:itu_app/model/film_model.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/material.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
@@ -19,7 +16,9 @@ class StatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Statistics'),
+        title: const Text('Results'),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
@@ -43,7 +42,9 @@ class StatsScreen extends StatelessWidget {
 }
 
 class BestMatchCard extends StatelessWidget {
-  double _percentageLikes = 0.0; // Local variable to store the percentage
+  double _percentageLikes = 0.0;
+
+  BestMatchCard({super.key}); // Local variable to store the percentage
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +52,11 @@ class BestMatchCard extends StatelessWidget {
       future: getBestMatchFilm(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data == null) {
-          return Text('No user films available.');
+          return const Text('No user films available.');
         }
 
         final bestMatchFilm = snapshot.data!;
@@ -66,7 +67,7 @@ class BestMatchCard extends StatelessWidget {
             const SizedBox(height: 5),
             Text(
               'Percentage of Likes: ${_percentageLikes.toStringAsFixed(2)}%',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 10),
             InkWell(
@@ -75,7 +76,7 @@ class BestMatchCard extends StatelessWidget {
                 // Open the comments screen for the selected film
                 context.push('/listFilms/$filmId/comments');
               },
-              child: Container(
+              child: SizedBox(
                 height: 490, // Adjust the height as needed
                 width: 300, // Adjust the width as needed
                 child: SingleChildScrollView(
@@ -95,9 +96,9 @@ class BestMatchCard extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : SizedBox(
+                          : const SizedBox(
                               height: 200, // Adjust the height as needed
-                              child: const Center(
+                              child: Center(
                                 child: Text("<No poster>"),
                               ),
                             ),
@@ -109,6 +110,7 @@ class BestMatchCard extends StatelessWidget {
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -245,7 +247,7 @@ class BestMatchCard extends StatelessWidget {
         await context.read<UserController>().getUsers(); // Await users
 
     // Calculate the percentage of likes for each film
-    final percentageLikes = Map<int, double>();
+    final percentageLikes = <int, double>{};
 
     for (final film in films) {
       final totalLikes = Sqflite.firstIntValue(await db.rawQuery('''

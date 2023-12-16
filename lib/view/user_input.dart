@@ -43,6 +43,10 @@ class _UserInputWidgetState extends State<UserInputWidget> {
               height: 55,
               child: Card(
                 margin: const EdgeInsets.all(3.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      15.0), // Adjust the radius as needed
+                ),
                 child: ListTile(
                   title: Text(user['name']),
                   onTap: () {

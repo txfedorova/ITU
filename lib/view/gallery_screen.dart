@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:itu_app/controller/user_films_controller.dart';
@@ -21,7 +20,9 @@ class GalleryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Screen'),
+        title: const Text('Film selection'),
+        backgroundColor: const Color.fromARGB(255, 68, 70, 115),
+        foregroundColor: Colors.white,
       ),
       body: FutureBuilder(
         future: filmController.films(),
@@ -173,12 +174,12 @@ class _FilmSwiperState extends State<FilmSwiper> {
                   // Swiped right (liked), add the film to user's likes
                   Provider.of<UserFilmsController>(context, listen: false)
                       .addUserFilm(widget.userId,
-                          filteredFilms[previousIndex!].id!, true);
+                          filteredFilms[previousIndex].id!, true);
                 } else if (direction.name == 'left') {
                   // Swiped left (disliked), add the film to user's dislikes
                   Provider.of<UserFilmsController>(context, listen: false)
                       .addUserFilm(widget.userId,
-                          filteredFilms[previousIndex!].id!, false);
+                          filteredFilms[previousIndex].id!, false);
                 }
 
                 return true;
@@ -190,7 +191,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
           ),
         if (isRoundCompleted || filteredFilms.isEmpty)
           Center(
-            child: Container(
+            child: SizedBox(
               width: 150, // Adjust the width as needed
               height: 60, // Adjust the height as needed
               child: ElevatedButton(

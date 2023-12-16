@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper extends ChangeNotifier{
+class DatabaseHelper extends ChangeNotifier {
   static final DatabaseHelper _instance = DatabaseHelper._privateConstructor();
   static Database? _database;
 
@@ -31,7 +31,8 @@ class DatabaseHelper extends ChangeNotifier{
   Future<void> _onCreate(Database db, int version) async {
     print('CREATING DATABASE\n\n\n\n\n\n\n');
 
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE films (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT NOT NULL,
@@ -45,7 +46,8 @@ class DatabaseHelper extends ChangeNotifier{
       )
     ''');
 
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         film_id INTEGER NOT NULL,
@@ -54,21 +56,23 @@ class DatabaseHelper extends ChangeNotifier{
         FOREIGN KEY (film_id) REFERENCES films (id)
       )''');
 
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE users (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT NOT NULL
       )
     ''');
 
-    await db.execute('''
+    await db.execute(
+        '''
       CREATE TABLE user_films (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         user_id INTEGER NOT NULL,
         film_id INTEGER NOT NULL,
         choice INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users (id),
-        FOREIGN KEY (film_id) REFERENCES films (id)
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+        FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE
       )
     ''');
   }
@@ -97,11 +101,24 @@ class DatabaseHelper extends ChangeNotifier{
 
   Future<void> deleteUser(int id) async {
     final db = await database;
-    await db.delete(
-      'users',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+
+    await db.transaction((txn) async {
+      // Delete user_films associated with the user
+      await txn.delete(
+        'user_films',
+        where: 'user_id = ?',
+        whereArgs: [id],
+      );
+
+      // Delete the user
+      await txn.delete(
+        'users',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    });
+
+    print('USER DELETED\n\n\n');
   }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
