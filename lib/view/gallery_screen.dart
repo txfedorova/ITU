@@ -214,7 +214,7 @@ class _FilmSwiperState extends State<FilmSwiper> {
               const SizedBox(height: 20),
               Center(
                 child: SizedBox(
-                  height: 700,
+                  height: 650,
                   width: 350,
                   child: CardSwiper(
                     controller: cardSwiperController,
@@ -266,14 +266,12 @@ class _FilmSwiperState extends State<FilmSwiper> {
                                       const SizedBox(height: 5),
                                       FilmAttribute(attribName: "Duration: ", attribValue: currentFilm.duration),
                                       const SizedBox(height: 10),
+                                      CommentsWidget(filmId: currentFilm.id!),
                                     ],
                                   ),
                                   // ),
                                 ),
                               ),
-                            ),
-                            Center(
-                              child: CommentsWidget(filmId: currentFilm.id!,)
                             ),
                           ],
                         ),
