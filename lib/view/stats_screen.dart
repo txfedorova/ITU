@@ -9,6 +9,8 @@ import 'package:itu_app/model/film_model.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:itu_app/common/film_card_widgets.dart';
+
 class StatsScreen extends StatelessWidget {
   const StatsScreen({Key? key}) : super(key: key);
 
@@ -83,25 +85,7 @@ class BestMatchCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      bestMatchFilm.posterPath != "<No poster>"
-                          ? Container(
-                              height: 470, // Adjust the height as needed
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(
-                                  image: Image.file(
-                                    File(bestMatchFilm.posterPath),
-                                  ).image,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            )
-                          : const SizedBox(
-                              height: 200, // Adjust the height as needed
-                              child: Center(
-                                child: Text("<No poster>"),
-                              ),
-                            ),
+                      FilmPoster(posterPath: bestMatchFilm.posterPath),
                       const SizedBox(height: 10),
                       Center(
                         child: Text(
@@ -114,146 +98,23 @@ class BestMatchCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Overview: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: bestMatchFilm.overview,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      FilmAttribute(attribName: "Overview: ", attribValue: bestMatchFilm.overview),
                       const SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Release date: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: bestMatchFilm.releaseDate,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      FilmAttribute(attribName: "Release Date: ", attribValue: bestMatchFilm.releaseDate),
                       const SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Actors: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: bestMatchFilm.actors,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      FilmAttribute(attribName: "Actors: ", attribValue: bestMatchFilm.actors),
                       const SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Director: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: bestMatchFilm.director,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      FilmAttribute(attribName: "Director: ", attribValue: bestMatchFilm.director),
                       const SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Duration: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            TextSpan(
-                              text: bestMatchFilm.duration,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      FilmAttribute(attribName: "Duration: ", attribValue: bestMatchFilm.duration),
                       const SizedBox(height: 10),
+                      CommentsWidget(filmId: bestMatchFilm.id!),
                     ],
                   ),
                 ),
               ),
             ),
-            Center(
-              child: SizedBox(
-                height: 50, // Adjust the height as needed
-                child: TextButton(
-                  onPressed: () {
-                    int filmId = bestMatchFilm.id!;
-                    // Open the comments screen for the selected film
-                    context.push('/listFilms/$filmId/comments');
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.comment),
-                      SizedBox(width: 8),
-                      Text('View Comments'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          
           ],
         );
       },
