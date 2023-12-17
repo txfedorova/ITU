@@ -57,16 +57,6 @@ class HomeScreen extends StatelessWidget {
                   context.push('/listFilms');
                 },
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                child: const Text(
-                  'Delete Database',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () async {
-                  await _deleteDatabase(context);
-                },
-              ),
             ],
           ),
         ),
@@ -74,21 +64,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _deleteDatabase(BuildContext context) async {
-    try {
-      final dbHelper = DatabaseHelper();
-      await dbHelper.clearDatabase();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Database deleted successfully'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error deleting database: $e'),
-        ),
-      );
-    }
-  }
+ 
 }
